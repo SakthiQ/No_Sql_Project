@@ -10,7 +10,7 @@ FROM orders o
 JOIN order_items i ON i.order_id = o.order_id
 WHERE o.order_id = ?;
 
--- @weight 15 read  order with customer info
+-- @weight 12 read  order with customer info
 SELECT o.order_id, o.status, o.total, c.customer_id, c.name, c.email
 FROM orders o
 JOIN customers c ON c.customer_id = o.customer_id

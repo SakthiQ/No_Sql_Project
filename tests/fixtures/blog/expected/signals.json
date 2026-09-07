@@ -1,0 +1,245 @@
+{
+  "junctions": {
+    "post_tags": {
+      "has_payload": false,
+      "sides": [
+        "posts",
+        "tags"
+      ]
+    }
+  },
+  "relationships": [
+    {
+      "cardinality": "1:N",
+      "child": "posts",
+      "child_standalone": 1.0,
+      "co_access": 0.0,
+      "est_embedded_size": 499800,
+      "fanout_max": null,
+      "fanout_min": 50,
+      "fk_name": null,
+      "on_delete": "SET NULL",
+      "parent": "categories",
+      "parent_is_lookup": true,
+      "parent_shared": false,
+      "unbounded": true,
+      "write_ratio_child": 0.2,
+      "write_ratio_parent": 0.0
+    },
+    {
+      "cardinality": "1:N",
+      "child": "posts",
+      "child_standalone": 1.0,
+      "co_access": 0.0,
+      "est_embedded_size": 499800,
+      "fanout_max": null,
+      "fanout_min": 50,
+      "fk_name": "fk_posts_author",
+      "on_delete": null,
+      "parent": "authors",
+      "parent_is_lookup": false,
+      "parent_shared": false,
+      "unbounded": true,
+      "write_ratio_child": 0.2,
+      "write_ratio_parent": 0.0
+    },
+    {
+      "cardinality": "1:N",
+      "child": "comments",
+      "child_standalone": 0.0,
+      "co_access": 1.0,
+      "est_embedded_size": 318150,
+      "fanout_max": null,
+      "fanout_min": 50,
+      "fk_name": null,
+      "on_delete": "CASCADE",
+      "parent": "comments",
+      "parent_is_lookup": false,
+      "parent_shared": false,
+      "unbounded": true,
+      "write_ratio_child": 0.441,
+      "write_ratio_parent": 0.441
+    },
+    {
+      "cardinality": "1:N",
+      "child": "comments",
+      "child_standalone": 0.485,
+      "co_access": 0.398,
+      "est_embedded_size": 318150,
+      "fanout_max": null,
+      "fanout_min": 50,
+      "fk_name": "fk_comments_post",
+      "on_delete": "CASCADE",
+      "parent": "posts",
+      "parent_is_lookup": false,
+      "parent_shared": true,
+      "unbounded": true,
+      "write_ratio_child": 0.441,
+      "write_ratio_parent": 0.2
+    },
+    {
+      "cardinality": "1:N",
+      "child": "post_tags",
+      "child_standalone": 0.361,
+      "co_access": 0.261,
+      "est_embedded_size": 160,
+      "fanout_max": 20,
+      "fanout_min": 1,
+      "fk_name": null,
+      "on_delete": "CASCADE",
+      "parent": "posts",
+      "parent_is_lookup": false,
+      "parent_shared": true,
+      "unbounded": false,
+      "write_ratio_child": 0.222,
+      "write_ratio_parent": 0.2
+    },
+    {
+      "cardinality": "1:N",
+      "child": "post_tags",
+      "child_standalone": 0.222,
+      "co_access": 1.0,
+      "est_embedded_size": 160,
+      "fanout_max": 20,
+      "fanout_min": 1,
+      "fk_name": null,
+      "on_delete": "CASCADE",
+      "parent": "tags",
+      "parent_is_lookup": true,
+      "parent_shared": false,
+      "unbounded": false,
+      "write_ratio_child": 0.222,
+      "write_ratio_parent": 0.0
+    },
+    {
+      "cardinality": "1:N",
+      "child": "page_views",
+      "child_standalone": 1.0,
+      "co_access": 0.0,
+      "est_embedded_size": 42000,
+      "fanout_max": null,
+      "fanout_min": 50,
+      "fk_name": null,
+      "on_delete": null,
+      "parent": "posts",
+      "parent_is_lookup": false,
+      "parent_shared": true,
+      "unbounded": true,
+      "write_ratio_child": 0.455,
+      "write_ratio_parent": 0.2
+    }
+  ],
+  "tables": {
+    "authors": {
+      "has_hierarchy": false,
+      "incoming": [
+        "posts"
+      ],
+      "is_junction": false,
+      "is_lookup": false,
+      "outgoing": [],
+      "read_weight": 5.0,
+      "role": "parent",
+      "row_width": 822,
+      "standalone_weight": 5.0,
+      "write_ratio": 0.0,
+      "write_weight": 0
+    },
+    "categories": {
+      "has_hierarchy": false,
+      "incoming": [
+        "posts"
+      ],
+      "is_junction": false,
+      "is_lookup": true,
+      "outgoing": [],
+      "read_weight": 0,
+      "role": "lookup",
+      "row_width": 168,
+      "standalone_weight": 0,
+      "write_ratio": 0.0,
+      "write_weight": 0
+    },
+    "comments": {
+      "has_hierarchy": true,
+      "incoming": [],
+      "is_junction": false,
+      "is_lookup": false,
+      "outgoing": [
+        "posts"
+      ],
+      "read_weight": 38.0,
+      "role": "child",
+      "row_width": 606,
+      "standalone_weight": 33.0,
+      "write_ratio": 0.441,
+      "write_weight": 30.0
+    },
+    "page_views": {
+      "has_hierarchy": false,
+      "incoming": [],
+      "is_junction": false,
+      "is_lookup": false,
+      "outgoing": [
+        "posts"
+      ],
+      "read_weight": 12.0,
+      "role": "child",
+      "row_width": 80,
+      "standalone_weight": 22.0,
+      "write_ratio": 0.455,
+      "write_weight": 10.0
+    },
+    "post_tags": {
+      "has_hierarchy": false,
+      "incoming": [],
+      "is_junction": true,
+      "is_lookup": false,
+      "outgoing": [
+        "posts",
+        "tags"
+      ],
+      "read_weight": 28.0,
+      "role": "junction",
+      "row_width": 16,
+      "standalone_weight": 8.0,
+      "write_ratio": 0.222,
+      "write_weight": 8.0
+    },
+    "posts": {
+      "has_hierarchy": false,
+      "incoming": [
+        "comments",
+        "page_views",
+        "post_tags"
+      ],
+      "is_junction": false,
+      "is_lookup": false,
+      "outgoing": [
+        "authors",
+        "categories"
+      ],
+      "read_weight": 88.0,
+      "role": "hub",
+      "row_width": 952,
+      "standalone_weight": 52.0,
+      "write_ratio": 0.2,
+      "write_weight": 22.0
+    },
+    "tags": {
+      "has_hierarchy": false,
+      "incoming": [
+        "post_tags"
+      ],
+      "is_junction": false,
+      "is_lookup": true,
+      "outgoing": [],
+      "read_weight": 28.0,
+      "role": "lookup",
+      "row_width": 128,
+      "standalone_weight": 0,
+      "write_ratio": 0.0,
+      "write_weight": 0
+    }
+  }
+}

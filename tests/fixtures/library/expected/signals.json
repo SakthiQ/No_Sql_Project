@@ -1,0 +1,295 @@
+{
+  "junctions": {
+    "book_authors": {
+      "has_payload": false,
+      "sides": [
+        "authors",
+        "books"
+      ]
+    }
+  },
+  "relationships": [
+    {
+      "cardinality": "1:N",
+      "child": "books",
+      "child_standalone": 0.901,
+      "co_access": 1.0,
+      "est_embedded_size": 6640,
+      "fanout_max": 20,
+      "fanout_min": 1,
+      "fk_name": null,
+      "on_delete": null,
+      "parent": "Genres",
+      "parent_is_lookup": true,
+      "parent_shared": false,
+      "unbounded": false,
+      "write_ratio_child": 0.037,
+      "write_ratio_parent": 0.0
+    },
+    {
+      "cardinality": "1:1",
+      "child": "book_details",
+      "child_standalone": 0.062,
+      "co_access": 0.577,
+      "est_embedded_size": 120,
+      "fanout_max": 1,
+      "fanout_min": 1,
+      "fk_name": null,
+      "on_delete": null,
+      "parent": "books",
+      "parent_is_lookup": false,
+      "parent_shared": true,
+      "unbounded": false,
+      "write_ratio_child": 0.062,
+      "write_ratio_parent": 0.037
+    },
+    {
+      "cardinality": "1:N",
+      "child": "book_authors",
+      "child_standalone": 0.375,
+      "co_access": 0.064,
+      "est_embedded_size": 160,
+      "fanout_max": 20,
+      "fanout_min": 1,
+      "fk_name": null,
+      "on_delete": "CASCADE",
+      "parent": "books",
+      "parent_is_lookup": false,
+      "parent_shared": true,
+      "unbounded": false,
+      "write_ratio_child": 0.375,
+      "write_ratio_parent": 0.037
+    },
+    {
+      "cardinality": "1:N",
+      "child": "book_authors",
+      "child_standalone": 0.375,
+      "co_access": 0.556,
+      "est_embedded_size": 160,
+      "fanout_max": 20,
+      "fanout_min": 1,
+      "fk_name": null,
+      "on_delete": "CASCADE",
+      "parent": "authors",
+      "parent_is_lookup": true,
+      "parent_shared": false,
+      "unbounded": false,
+      "write_ratio_child": 0.375,
+      "write_ratio_parent": 0.0
+    },
+    {
+      "cardinality": "1:N",
+      "child": "book_copies",
+      "child_standalone": 1.0,
+      "co_access": 0.0,
+      "est_embedded_size": 2800,
+      "fanout_max": 100,
+      "fanout_min": 1,
+      "fk_name": null,
+      "on_delete": null,
+      "parent": "books",
+      "parent_is_lookup": false,
+      "parent_shared": true,
+      "unbounded": false,
+      "write_ratio_child": 0.76,
+      "write_ratio_parent": 0.037
+    },
+    {
+      "cardinality": "1:N",
+      "child": "book_copies",
+      "child_standalone": 0.76,
+      "co_access": 1.0,
+      "est_embedded_size": 2800,
+      "fanout_max": 100,
+      "fanout_min": 1,
+      "fk_name": null,
+      "on_delete": null,
+      "parent": "branches",
+      "parent_is_lookup": true,
+      "parent_shared": false,
+      "unbounded": false,
+      "write_ratio_child": 0.76,
+      "write_ratio_parent": 0.0
+    },
+    {
+      "cardinality": "1:N",
+      "child": "loans",
+      "child_standalone": 1.0,
+      "co_access": 0.0,
+      "est_embedded_size": 29400,
+      "fanout_max": null,
+      "fanout_min": 50,
+      "fk_name": null,
+      "on_delete": null,
+      "parent": "book_copies",
+      "parent_is_lookup": false,
+      "parent_shared": false,
+      "unbounded": true,
+      "write_ratio_child": 0.644,
+      "write_ratio_parent": 0.76
+    },
+    {
+      "cardinality": "1:N",
+      "child": "loans",
+      "child_standalone": 1.0,
+      "co_access": 0.0,
+      "est_embedded_size": 29400,
+      "fanout_max": null,
+      "fanout_min": 50,
+      "fk_name": "fk_loans_member",
+      "on_delete": null,
+      "parent": "members",
+      "parent_is_lookup": false,
+      "parent_shared": false,
+      "unbounded": true,
+      "write_ratio_child": 0.644,
+      "write_ratio_parent": 0.0
+    }
+  ],
+  "tables": {
+    "Genres": {
+      "has_hierarchy": false,
+      "incoming": [
+        "books"
+      ],
+      "is_junction": false,
+      "is_lookup": true,
+      "outgoing": [],
+      "read_weight": 8.0,
+      "role": "lookup",
+      "row_width": 128,
+      "standalone_weight": 0,
+      "write_ratio": 0.0,
+      "write_weight": 0
+    },
+    "authors": {
+      "has_hierarchy": false,
+      "incoming": [
+        "book_authors"
+      ],
+      "is_junction": false,
+      "is_lookup": true,
+      "outgoing": [],
+      "read_weight": 9.0,
+      "role": "lookup",
+      "row_width": 248,
+      "standalone_weight": 4.0,
+      "write_ratio": 0.0,
+      "write_weight": 0
+    },
+    "book_authors": {
+      "has_hierarchy": false,
+      "incoming": [],
+      "is_junction": true,
+      "is_lookup": false,
+      "outgoing": [
+        "authors",
+        "books"
+      ],
+      "read_weight": 5.0,
+      "role": "junction",
+      "row_width": 16,
+      "standalone_weight": 3.0,
+      "write_ratio": 0.375,
+      "write_weight": 3.0
+    },
+    "book_copies": {
+      "has_hierarchy": false,
+      "incoming": [
+        "loans"
+      ],
+      "is_junction": false,
+      "is_lookup": false,
+      "outgoing": [
+        "books",
+        "branches"
+      ],
+      "read_weight": 12.0,
+      "role": "hub",
+      "row_width": 56,
+      "standalone_weight": 38.0,
+      "write_ratio": 0.76,
+      "write_weight": 38.0
+    },
+    "book_details": {
+      "has_hierarchy": false,
+      "incoming": [],
+      "is_junction": false,
+      "is_lookup": false,
+      "outgoing": [
+        "books"
+      ],
+      "read_weight": 45.0,
+      "role": "owned",
+      "row_width": 120,
+      "standalone_weight": 3.0,
+      "write_ratio": 0.062,
+      "write_weight": 3.0
+    },
+    "books": {
+      "has_hierarchy": false,
+      "incoming": [
+        "book_authors",
+        "book_copies",
+        "book_details"
+      ],
+      "is_junction": false,
+      "is_lookup": false,
+      "outgoing": [
+        "Genres"
+      ],
+      "read_weight": 78.0,
+      "role": "hub",
+      "row_width": 664,
+      "standalone_weight": 8.0,
+      "write_ratio": 0.037,
+      "write_weight": 3.0
+    },
+    "branches": {
+      "has_hierarchy": false,
+      "incoming": [
+        "book_copies"
+      ],
+      "is_junction": false,
+      "is_lookup": true,
+      "outgoing": [],
+      "read_weight": 12.0,
+      "role": "lookup",
+      "row_width": 408,
+      "standalone_weight": 0,
+      "write_ratio": 0.0,
+      "write_weight": 0
+    },
+    "loans": {
+      "has_hierarchy": false,
+      "incoming": [],
+      "is_junction": false,
+      "is_lookup": false,
+      "outgoing": [
+        "book_copies",
+        "members"
+      ],
+      "read_weight": 21.0,
+      "role": "child",
+      "row_width": 56,
+      "standalone_weight": 44.0,
+      "write_ratio": 0.644,
+      "write_weight": 38.0
+    },
+    "members": {
+      "has_hierarchy": false,
+      "incoming": [
+        "loans"
+      ],
+      "is_junction": false,
+      "is_lookup": false,
+      "outgoing": [],
+      "read_weight": 10.0,
+      "role": "parent",
+      "row_width": 766,
+      "standalone_weight": 10.0,
+      "write_ratio": 0.0,
+      "write_weight": 0
+    }
+  }
+}

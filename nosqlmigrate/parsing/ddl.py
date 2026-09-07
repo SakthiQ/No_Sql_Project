@@ -144,7 +144,11 @@ def _type_params(kind: exp.DataType) -> list:
     for p in kind.expressions:
         inner = p.this if isinstance(p, exp.DataTypeParam) else p
         if isinstance(inner, exp.Literal):
-            params.append(inner.this)
+            value = inner.this
+            # numeric literals may arrive as strings depending on dialect path
+            if isinstance(value, str) and value.strip().isdigit():
+                value = int(value)
+            params.append(value)
         elif isinstance(inner, exp.DataType):
             params.append(str(inner.this.value))
         else:
