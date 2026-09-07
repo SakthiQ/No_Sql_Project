@@ -1,0 +1,544 @@
+{
+  "diagnostics": [
+    {
+      "code": "UNMIGRATABLE_CHECK",
+      "excerpt": "CHECK (LENGTH(body) > 0)",
+      "message": "CHECK constraint cannot be migrated \u2014 enforce in the application layer",
+      "severity": "WARNING"
+    },
+    {
+      "code": "MISSING_PK",
+      "excerpt": "",
+      "message": "table page_views has no primary key",
+      "severity": "INFO"
+    }
+  ],
+  "dialect": "postgres",
+  "tables": [
+    {
+      "columns": [
+        {
+          "autoincrement": true,
+          "category": "INTEGER",
+          "char_length": null,
+          "default": null,
+          "name": "author_id",
+          "nullable": false,
+          "precision": null,
+          "scale": null,
+          "type": "BIGSERIAL"
+        },
+        {
+          "autoincrement": false,
+          "category": "TEXT",
+          "char_length": null,
+          "default": null,
+          "name": "email",
+          "nullable": false,
+          "precision": null,
+          "scale": null,
+          "type": "VARCHAR(255)"
+        },
+        {
+          "autoincrement": false,
+          "category": "TEXT",
+          "char_length": null,
+          "default": null,
+          "name": "display_name",
+          "nullable": false,
+          "precision": null,
+          "scale": null,
+          "type": "VARCHAR(120)"
+        },
+        {
+          "autoincrement": false,
+          "category": "TEXT",
+          "char_length": null,
+          "default": null,
+          "name": "bio",
+          "nullable": true,
+          "precision": null,
+          "scale": null,
+          "type": "TEXT"
+        }
+      ],
+      "foreign_keys": [],
+      "name": "authors",
+      "primary_key": {
+        "columns": [
+          "author_id"
+        ],
+        "name": null
+      },
+      "quoted": false,
+      "uniques": [
+        {
+          "columns": [
+            "email"
+          ],
+          "name": null
+        }
+      ]
+    },
+    {
+      "columns": [
+        {
+          "autoincrement": true,
+          "category": "INTEGER",
+          "char_length": null,
+          "default": null,
+          "name": "category_id",
+          "nullable": false,
+          "precision": null,
+          "scale": null,
+          "type": "SERIAL"
+        },
+        {
+          "autoincrement": false,
+          "category": "TEXT",
+          "char_length": null,
+          "default": null,
+          "name": "name",
+          "nullable": false,
+          "precision": null,
+          "scale": null,
+          "type": "VARCHAR(80)"
+        }
+      ],
+      "foreign_keys": [],
+      "name": "categories",
+      "primary_key": {
+        "columns": [
+          "category_id"
+        ],
+        "name": null
+      },
+      "quoted": false,
+      "uniques": [
+        {
+          "columns": [
+            "name"
+          ],
+          "name": null
+        }
+      ]
+    },
+    {
+      "columns": [
+        {
+          "autoincrement": true,
+          "category": "INTEGER",
+          "char_length": null,
+          "default": null,
+          "name": "comment_id",
+          "nullable": false,
+          "precision": null,
+          "scale": null,
+          "type": "BIGSERIAL"
+        },
+        {
+          "autoincrement": false,
+          "category": "INTEGER",
+          "char_length": null,
+          "default": null,
+          "name": "post_id",
+          "nullable": false,
+          "precision": null,
+          "scale": null,
+          "type": "BIGINT"
+        },
+        {
+          "autoincrement": false,
+          "category": "INTEGER",
+          "char_length": null,
+          "default": null,
+          "name": "parent_id",
+          "nullable": true,
+          "precision": null,
+          "scale": null,
+          "type": "BIGINT"
+        },
+        {
+          "autoincrement": false,
+          "category": "TEXT",
+          "char_length": null,
+          "default": null,
+          "name": "author_email",
+          "nullable": false,
+          "precision": null,
+          "scale": null,
+          "type": "VARCHAR(255)"
+        },
+        {
+          "autoincrement": false,
+          "category": "TEXT",
+          "char_length": null,
+          "default": null,
+          "name": "body",
+          "nullable": false,
+          "precision": null,
+          "scale": null,
+          "type": "TEXT"
+        },
+        {
+          "autoincrement": false,
+          "category": "TEMPORAL",
+          "char_length": null,
+          "default": "CURRENT_TIMESTAMP",
+          "name": "created_at",
+          "nullable": false,
+          "precision": null,
+          "scale": null,
+          "type": "TIMESTAMPTZ"
+        }
+      ],
+      "foreign_keys": [
+        {
+          "name": null,
+          "on_delete": "CASCADE",
+          "on_update": null,
+          "source_columns": [
+            "parent_id"
+          ],
+          "source_table": "comments",
+          "target_columns": [
+            "comment_id"
+          ],
+          "target_table": "comments"
+        },
+        {
+          "name": "fk_comments_post",
+          "on_delete": "CASCADE",
+          "on_update": null,
+          "source_columns": [
+            "post_id"
+          ],
+          "source_table": "comments",
+          "target_columns": [
+            "post_id"
+          ],
+          "target_table": "posts"
+        }
+      ],
+      "name": "comments",
+      "primary_key": {
+        "columns": [
+          "comment_id"
+        ],
+        "name": null
+      },
+      "quoted": false,
+      "uniques": []
+    },
+    {
+      "columns": [
+        {
+          "autoincrement": false,
+          "category": "INTEGER",
+          "char_length": null,
+          "default": null,
+          "name": "post_id",
+          "nullable": false,
+          "precision": null,
+          "scale": null,
+          "type": "BIGINT"
+        },
+        {
+          "autoincrement": false,
+          "category": "TEMPORAL",
+          "char_length": null,
+          "default": null,
+          "name": "viewed_at",
+          "nullable": false,
+          "precision": null,
+          "scale": null,
+          "type": "TIMESTAMPTZ"
+        },
+        {
+          "autoincrement": false,
+          "category": "TEXT",
+          "char_length": null,
+          "default": null,
+          "name": "referrer",
+          "nullable": true,
+          "precision": null,
+          "scale": null,
+          "type": "TEXT"
+        }
+      ],
+      "foreign_keys": [
+        {
+          "name": null,
+          "on_delete": null,
+          "on_update": null,
+          "source_columns": [
+            "post_id"
+          ],
+          "source_table": "page_views",
+          "target_columns": [
+            "post_id"
+          ],
+          "target_table": "posts"
+        }
+      ],
+      "name": "page_views",
+      "primary_key": null,
+      "quoted": false,
+      "uniques": []
+    },
+    {
+      "columns": [
+        {
+          "autoincrement": false,
+          "category": "INTEGER",
+          "char_length": null,
+          "default": null,
+          "name": "post_id",
+          "nullable": false,
+          "precision": null,
+          "scale": null,
+          "type": "BIGINT"
+        },
+        {
+          "autoincrement": false,
+          "category": "INTEGER",
+          "char_length": null,
+          "default": null,
+          "name": "tag_id",
+          "nullable": false,
+          "precision": null,
+          "scale": null,
+          "type": "INT"
+        }
+      ],
+      "foreign_keys": [
+        {
+          "name": null,
+          "on_delete": "CASCADE",
+          "on_update": null,
+          "source_columns": [
+            "post_id"
+          ],
+          "source_table": "post_tags",
+          "target_columns": [
+            "post_id"
+          ],
+          "target_table": "posts"
+        },
+        {
+          "name": null,
+          "on_delete": "CASCADE",
+          "on_update": null,
+          "source_columns": [
+            "tag_id"
+          ],
+          "source_table": "post_tags",
+          "target_columns": [
+            "tag_id"
+          ],
+          "target_table": "tags"
+        }
+      ],
+      "name": "post_tags",
+      "primary_key": {
+        "columns": [
+          "post_id",
+          "tag_id"
+        ],
+        "name": null
+      },
+      "quoted": false,
+      "uniques": []
+    },
+    {
+      "columns": [
+        {
+          "autoincrement": true,
+          "category": "INTEGER",
+          "char_length": null,
+          "default": null,
+          "name": "post_id",
+          "nullable": false,
+          "precision": null,
+          "scale": null,
+          "type": "BIGSERIAL"
+        },
+        {
+          "autoincrement": false,
+          "category": "INTEGER",
+          "char_length": null,
+          "default": null,
+          "name": "author_id",
+          "nullable": false,
+          "precision": null,
+          "scale": null,
+          "type": "BIGINT"
+        },
+        {
+          "autoincrement": false,
+          "category": "INTEGER",
+          "char_length": null,
+          "default": null,
+          "name": "category_id",
+          "nullable": true,
+          "precision": null,
+          "scale": null,
+          "type": "INT"
+        },
+        {
+          "autoincrement": false,
+          "category": "TEXT",
+          "char_length": null,
+          "default": null,
+          "name": "title",
+          "nullable": false,
+          "precision": null,
+          "scale": null,
+          "type": "VARCHAR(200)"
+        },
+        {
+          "autoincrement": false,
+          "category": "TEXT",
+          "char_length": null,
+          "default": null,
+          "name": "slug",
+          "nullable": false,
+          "precision": null,
+          "scale": null,
+          "type": "VARCHAR(220)"
+        },
+        {
+          "autoincrement": false,
+          "category": "TEXT",
+          "char_length": null,
+          "default": null,
+          "name": "body",
+          "nullable": false,
+          "precision": null,
+          "scale": null,
+          "type": "TEXT"
+        },
+        {
+          "autoincrement": false,
+          "category": "INTEGER",
+          "char_length": null,
+          "default": "0",
+          "name": "order",
+          "nullable": false,
+          "precision": null,
+          "scale": null,
+          "type": "INT"
+        },
+        {
+          "autoincrement": false,
+          "category": "TEMPORAL",
+          "char_length": null,
+          "default": null,
+          "name": "published_at",
+          "nullable": true,
+          "precision": null,
+          "scale": null,
+          "type": "TIMESTAMPTZ"
+        },
+        {
+          "autoincrement": false,
+          "category": "TEMPORAL",
+          "char_length": null,
+          "default": "CURRENT_TIMESTAMP",
+          "name": "created_at",
+          "nullable": false,
+          "precision": null,
+          "scale": null,
+          "type": "TIMESTAMPTZ"
+        }
+      ],
+      "foreign_keys": [
+        {
+          "name": "fk_posts_author",
+          "on_delete": null,
+          "on_update": null,
+          "source_columns": [
+            "author_id"
+          ],
+          "source_table": "posts",
+          "target_columns": [
+            "author_id"
+          ],
+          "target_table": "authors"
+        },
+        {
+          "name": null,
+          "on_delete": "SET NULL",
+          "on_update": null,
+          "source_columns": [
+            "category_id"
+          ],
+          "source_table": "posts",
+          "target_columns": [
+            "category_id"
+          ],
+          "target_table": "categories"
+        }
+      ],
+      "name": "posts",
+      "primary_key": {
+        "columns": [
+          "post_id"
+        ],
+        "name": null
+      },
+      "quoted": false,
+      "uniques": [
+        {
+          "columns": [
+            "slug"
+          ],
+          "name": null
+        }
+      ]
+    },
+    {
+      "columns": [
+        {
+          "autoincrement": true,
+          "category": "INTEGER",
+          "char_length": null,
+          "default": null,
+          "name": "tag_id",
+          "nullable": false,
+          "precision": null,
+          "scale": null,
+          "type": "SERIAL"
+        },
+        {
+          "autoincrement": false,
+          "category": "TEXT",
+          "char_length": null,
+          "default": null,
+          "name": "name",
+          "nullable": false,
+          "precision": null,
+          "scale": null,
+          "type": "VARCHAR(60)"
+        }
+      ],
+      "foreign_keys": [],
+      "name": "tags",
+      "primary_key": {
+        "columns": [
+          "tag_id"
+        ],
+        "name": null
+      },
+      "quoted": false,
+      "uniques": [
+        {
+          "columns": [
+            "name"
+          ],
+          "name": null
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,640 @@
+{
+  "diagnostics": [],
+  "dialect": "postgres",
+  "tables": [
+    {
+      "columns": [
+        {
+          "autoincrement": true,
+          "category": "INTEGER",
+          "char_length": null,
+          "default": null,
+          "name": "genre_id",
+          "nullable": false,
+          "precision": null,
+          "scale": null,
+          "type": "SERIAL"
+        },
+        {
+          "autoincrement": false,
+          "category": "TEXT",
+          "char_length": null,
+          "default": null,
+          "name": "genre_name",
+          "nullable": false,
+          "precision": null,
+          "scale": null,
+          "type": "VARCHAR(60)"
+        }
+      ],
+      "foreign_keys": [],
+      "name": "Genres",
+      "primary_key": {
+        "columns": [
+          "genre_id"
+        ],
+        "name": null
+      },
+      "quoted": true,
+      "uniques": []
+    },
+    {
+      "columns": [
+        {
+          "autoincrement": true,
+          "category": "INTEGER",
+          "char_length": null,
+          "default": null,
+          "name": "author_id",
+          "nullable": false,
+          "precision": null,
+          "scale": null,
+          "type": "SERIAL"
+        },
+        {
+          "autoincrement": false,
+          "category": "TEXT",
+          "char_length": null,
+          "default": null,
+          "name": "full_name",
+          "nullable": false,
+          "precision": null,
+          "scale": null,
+          "type": "VARCHAR(120)"
+        }
+      ],
+      "foreign_keys": [],
+      "name": "authors",
+      "primary_key": {
+        "columns": [
+          "author_id"
+        ],
+        "name": null
+      },
+      "quoted": false,
+      "uniques": []
+    },
+    {
+      "columns": [
+        {
+          "autoincrement": false,
+          "category": "INTEGER",
+          "char_length": null,
+          "default": null,
+          "name": "book_id",
+          "nullable": false,
+          "precision": null,
+          "scale": null,
+          "type": "INT"
+        },
+        {
+          "autoincrement": false,
+          "category": "INTEGER",
+          "char_length": null,
+          "default": null,
+          "name": "author_id",
+          "nullable": false,
+          "precision": null,
+          "scale": null,
+          "type": "INT"
+        }
+      ],
+      "foreign_keys": [
+        {
+          "name": null,
+          "on_delete": "CASCADE",
+          "on_update": null,
+          "source_columns": [
+            "author_id"
+          ],
+          "source_table": "book_authors",
+          "target_columns": [
+            "author_id"
+          ],
+          "target_table": "authors"
+        },
+        {
+          "name": null,
+          "on_delete": "CASCADE",
+          "on_update": null,
+          "source_columns": [
+            "book_id"
+          ],
+          "source_table": "book_authors",
+          "target_columns": [
+            "book_id"
+          ],
+          "target_table": "books"
+        }
+      ],
+      "name": "book_authors",
+      "primary_key": {
+        "columns": [
+          "book_id",
+          "author_id"
+        ],
+        "name": null
+      },
+      "quoted": false,
+      "uniques": []
+    },
+    {
+      "columns": [
+        {
+          "autoincrement": true,
+          "category": "INTEGER",
+          "char_length": null,
+          "default": null,
+          "name": "copy_id",
+          "nullable": false,
+          "precision": null,
+          "scale": null,
+          "type": "SERIAL"
+        },
+        {
+          "autoincrement": false,
+          "category": "INTEGER",
+          "char_length": null,
+          "default": null,
+          "name": "book_id",
+          "nullable": false,
+          "precision": null,
+          "scale": null,
+          "type": "INT"
+        },
+        {
+          "autoincrement": false,
+          "category": "INTEGER",
+          "char_length": null,
+          "default": null,
+          "name": "copy_no",
+          "nullable": false,
+          "precision": null,
+          "scale": null,
+          "type": "INT"
+        },
+        {
+          "autoincrement": false,
+          "category": "INTEGER",
+          "char_length": null,
+          "default": null,
+          "name": "branch_id",
+          "nullable": false,
+          "precision": null,
+          "scale": null,
+          "type": "INT"
+        },
+        {
+          "autoincrement": false,
+          "category": "TEXT",
+          "char_length": null,
+          "default": "'available'",
+          "name": "status",
+          "nullable": false,
+          "precision": null,
+          "scale": null,
+          "type": "VARCHAR(12)"
+        }
+      ],
+      "foreign_keys": [
+        {
+          "name": null,
+          "on_delete": null,
+          "on_update": null,
+          "source_columns": [
+            "book_id"
+          ],
+          "source_table": "book_copies",
+          "target_columns": [
+            "book_id"
+          ],
+          "target_table": "books"
+        },
+        {
+          "name": null,
+          "on_delete": null,
+          "on_update": null,
+          "source_columns": [
+            "branch_id"
+          ],
+          "source_table": "book_copies",
+          "target_columns": [
+            "branch_id"
+          ],
+          "target_table": "branches"
+        }
+      ],
+      "name": "book_copies",
+      "primary_key": {
+        "columns": [
+          "copy_id"
+        ],
+        "name": null
+      },
+      "quoted": false,
+      "uniques": [
+        {
+          "columns": [
+            "book_id",
+            "copy_no"
+          ],
+          "name": "uq_copies_book_no"
+        }
+      ]
+    },
+    {
+      "columns": [
+        {
+          "autoincrement": false,
+          "category": "INTEGER",
+          "char_length": null,
+          "default": null,
+          "name": "book_id",
+          "nullable": false,
+          "precision": null,
+          "scale": null,
+          "type": "INT"
+        },
+        {
+          "autoincrement": false,
+          "category": "TEXT",
+          "char_length": null,
+          "default": null,
+          "name": "isbn",
+          "nullable": false,
+          "precision": null,
+          "scale": null,
+          "type": "VARCHAR(20)"
+        },
+        {
+          "autoincrement": false,
+          "category": "TEXT",
+          "char_length": null,
+          "default": null,
+          "name": "synopsis",
+          "nullable": true,
+          "precision": null,
+          "scale": null,
+          "type": "TEXT"
+        },
+        {
+          "autoincrement": false,
+          "category": "INTEGER",
+          "char_length": null,
+          "default": null,
+          "name": "page_count",
+          "nullable": true,
+          "precision": null,
+          "scale": null,
+          "type": "INT"
+        }
+      ],
+      "foreign_keys": [
+        {
+          "name": null,
+          "on_delete": null,
+          "on_update": null,
+          "source_columns": [
+            "book_id"
+          ],
+          "source_table": "book_details",
+          "target_columns": [
+            "book_id"
+          ],
+          "target_table": "books"
+        }
+      ],
+      "name": "book_details",
+      "primary_key": {
+        "columns": [
+          "book_id"
+        ],
+        "name": null
+      },
+      "quoted": false,
+      "uniques": [
+        {
+          "columns": [
+            "isbn"
+          ],
+          "name": null
+        }
+      ]
+    },
+    {
+      "columns": [
+        {
+          "autoincrement": true,
+          "category": "INTEGER",
+          "char_length": null,
+          "default": null,
+          "name": "book_id",
+          "nullable": false,
+          "precision": null,
+          "scale": null,
+          "type": "SERIAL"
+        },
+        {
+          "autoincrement": false,
+          "category": "TEXT",
+          "char_length": null,
+          "default": null,
+          "name": "title",
+          "nullable": false,
+          "precision": null,
+          "scale": null,
+          "type": "VARCHAR(200)"
+        },
+        {
+          "autoincrement": false,
+          "category": "TEXT",
+          "char_length": null,
+          "default": null,
+          "name": "publisher",
+          "nullable": true,
+          "precision": null,
+          "scale": null,
+          "type": "VARCHAR(120)"
+        },
+        {
+          "autoincrement": false,
+          "category": "INTEGER",
+          "char_length": null,
+          "default": null,
+          "name": "publication_year",
+          "nullable": true,
+          "precision": null,
+          "scale": null,
+          "type": "INT"
+        },
+        {
+          "autoincrement": false,
+          "category": "INTEGER",
+          "char_length": null,
+          "default": null,
+          "name": "genre_id",
+          "nullable": false,
+          "precision": null,
+          "scale": null,
+          "type": "INT"
+        }
+      ],
+      "foreign_keys": [
+        {
+          "name": null,
+          "on_delete": null,
+          "on_update": null,
+          "source_columns": [
+            "genre_id"
+          ],
+          "source_table": "books",
+          "target_columns": [
+            "genre_id"
+          ],
+          "target_table": "Genres"
+        }
+      ],
+      "name": "books",
+      "primary_key": {
+        "columns": [
+          "book_id"
+        ],
+        "name": null
+      },
+      "quoted": false,
+      "uniques": []
+    },
+    {
+      "columns": [
+        {
+          "autoincrement": true,
+          "category": "INTEGER",
+          "char_length": null,
+          "default": null,
+          "name": "branch_id",
+          "nullable": false,
+          "precision": null,
+          "scale": null,
+          "type": "SERIAL"
+        },
+        {
+          "autoincrement": false,
+          "category": "TEXT",
+          "char_length": null,
+          "default": null,
+          "name": "branch_name",
+          "nullable": false,
+          "precision": null,
+          "scale": null,
+          "type": "VARCHAR(120)"
+        },
+        {
+          "autoincrement": false,
+          "category": "TEXT",
+          "char_length": null,
+          "default": null,
+          "name": "city",
+          "nullable": false,
+          "precision": null,
+          "scale": null,
+          "type": "VARCHAR(80)"
+        }
+      ],
+      "foreign_keys": [],
+      "name": "branches",
+      "primary_key": {
+        "columns": [
+          "branch_id"
+        ],
+        "name": null
+      },
+      "quoted": false,
+      "uniques": []
+    },
+    {
+      "columns": [
+        {
+          "autoincrement": true,
+          "category": "INTEGER",
+          "char_length": null,
+          "default": null,
+          "name": "loan_id",
+          "nullable": false,
+          "precision": null,
+          "scale": null,
+          "type": "BIGSERIAL"
+        },
+        {
+          "autoincrement": false,
+          "category": "INTEGER",
+          "char_length": null,
+          "default": null,
+          "name": "member_id",
+          "nullable": false,
+          "precision": null,
+          "scale": null,
+          "type": "BIGINT"
+        },
+        {
+          "autoincrement": false,
+          "category": "INTEGER",
+          "char_length": null,
+          "default": null,
+          "name": "book_id",
+          "nullable": false,
+          "precision": null,
+          "scale": null,
+          "type": "INT"
+        },
+        {
+          "autoincrement": false,
+          "category": "INTEGER",
+          "char_length": null,
+          "default": null,
+          "name": "copy_no",
+          "nullable": false,
+          "precision": null,
+          "scale": null,
+          "type": "INT"
+        },
+        {
+          "autoincrement": false,
+          "category": "TEMPORAL",
+          "char_length": null,
+          "default": "CURRENT_TIMESTAMP",
+          "name": "borrowed_at",
+          "nullable": false,
+          "precision": null,
+          "scale": null,
+          "type": "TIMESTAMPTZ"
+        },
+        {
+          "autoincrement": false,
+          "category": "TEMPORAL",
+          "char_length": null,
+          "default": null,
+          "name": "due_at",
+          "nullable": false,
+          "precision": null,
+          "scale": null,
+          "type": "TIMESTAMPTZ"
+        },
+        {
+          "autoincrement": false,
+          "category": "TEMPORAL",
+          "char_length": null,
+          "default": null,
+          "name": "returned_at",
+          "nullable": true,
+          "precision": null,
+          "scale": null,
+          "type": "TIMESTAMPTZ"
+        }
+      ],
+      "foreign_keys": [
+        {
+          "name": null,
+          "on_delete": null,
+          "on_update": null,
+          "source_columns": [
+            "book_id",
+            "copy_no"
+          ],
+          "source_table": "loans",
+          "target_columns": [
+            "book_id",
+            "copy_no"
+          ],
+          "target_table": "book_copies"
+        },
+        {
+          "name": "fk_loans_member",
+          "on_delete": null,
+          "on_update": null,
+          "source_columns": [
+            "member_id"
+          ],
+          "source_table": "loans",
+          "target_columns": [
+            "member_id"
+          ],
+          "target_table": "members"
+        }
+      ],
+      "name": "loans",
+      "primary_key": {
+        "columns": [
+          "loan_id"
+        ],
+        "name": null
+      },
+      "quoted": false,
+      "uniques": []
+    },
+    {
+      "columns": [
+        {
+          "autoincrement": true,
+          "category": "INTEGER",
+          "char_length": null,
+          "default": null,
+          "name": "member_id",
+          "nullable": false,
+          "precision": null,
+          "scale": null,
+          "type": "BIGSERIAL"
+        },
+        {
+          "autoincrement": false,
+          "category": "TEXT",
+          "char_length": null,
+          "default": null,
+          "name": "full_name",
+          "nullable": false,
+          "precision": null,
+          "scale": null,
+          "type": "VARCHAR(120)"
+        },
+        {
+          "autoincrement": false,
+          "category": "TEXT",
+          "char_length": null,
+          "default": null,
+          "name": "email",
+          "nullable": false,
+          "precision": null,
+          "scale": null,
+          "type": "VARCHAR(255)"
+        },
+        {
+          "autoincrement": false,
+          "category": "TEMPORAL",
+          "char_length": null,
+          "default": "CURRENT_TIMESTAMP",
+          "name": "joined_at",
+          "nullable": false,
+          "precision": null,
+          "scale": null,
+          "type": "TIMESTAMPTZ"
+        }
+      ],
+      "foreign_keys": [],
+      "name": "members",
+      "primary_key": {
+        "columns": [
+          "member_id"
+        ],
+        "name": null
+      },
+      "quoted": false,
+      "uniques": [
+        {
+          "columns": [
+            "email"
+          ],
+          "name": null
+        }
+      ]
+    }
+  ]
+}
