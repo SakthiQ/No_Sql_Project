@@ -1,0 +1,771 @@
+{
+  "diagnostics": [
+    {
+      "code": "UNMIGRATABLE",
+      "excerpt": "/* Unmigratable construct on purpose: proves diagnostics fire. */ CREATE VIEW `v",
+      "message": "VIEW is not migrated \u2014 handle in the application layer",
+      "severity": "WARNING"
+    }
+  ],
+  "dialect": "mysql",
+  "tables": [
+    {
+      "columns": [
+        {
+          "autoincrement": true,
+          "category": "INTEGER",
+          "char_length": null,
+          "default": null,
+          "name": "address_id",
+          "nullable": false,
+          "precision": null,
+          "scale": null,
+          "type": "INT"
+        },
+        {
+          "autoincrement": false,
+          "category": "INTEGER",
+          "char_length": null,
+          "default": null,
+          "name": "customer_id",
+          "nullable": false,
+          "precision": null,
+          "scale": null,
+          "type": "INT"
+        },
+        {
+          "autoincrement": false,
+          "category": "TEXT",
+          "char_length": 30,
+          "default": null,
+          "name": "label",
+          "nullable": false,
+          "precision": null,
+          "scale": null,
+          "type": "VARCHAR(30)"
+        },
+        {
+          "autoincrement": false,
+          "category": "TEXT",
+          "char_length": 120,
+          "default": null,
+          "name": "line1",
+          "nullable": false,
+          "precision": null,
+          "scale": null,
+          "type": "VARCHAR(120)"
+        },
+        {
+          "autoincrement": false,
+          "category": "TEXT",
+          "char_length": 120,
+          "default": null,
+          "name": "line2",
+          "nullable": false,
+          "precision": null,
+          "scale": null,
+          "type": "VARCHAR(120)"
+        },
+        {
+          "autoincrement": false,
+          "category": "TEXT",
+          "char_length": 80,
+          "default": null,
+          "name": "city",
+          "nullable": false,
+          "precision": null,
+          "scale": null,
+          "type": "VARCHAR(80)"
+        },
+        {
+          "autoincrement": false,
+          "category": "TEXT",
+          "char_length": 2,
+          "default": null,
+          "name": "country_code",
+          "nullable": false,
+          "precision": null,
+          "scale": null,
+          "type": "CHAR(2)"
+        },
+        {
+          "autoincrement": false,
+          "category": "TEXT",
+          "char_length": 16,
+          "default": null,
+          "name": "postal_code",
+          "nullable": false,
+          "precision": null,
+          "scale": null,
+          "type": "VARCHAR(16)"
+        }
+      ],
+      "foreign_keys": [
+        {
+          "name": "fk_addresses_customer",
+          "on_delete": "CASCADE",
+          "on_update": null,
+          "source_columns": [
+            "customer_id"
+          ],
+          "source_table": "addresses",
+          "target_columns": [
+            "customer_id"
+          ],
+          "target_table": "customers"
+        }
+      ],
+      "name": "addresses",
+      "primary_key": {
+        "columns": [
+          "address_id"
+        ],
+        "name": null
+      },
+      "quoted": true,
+      "uniques": [
+        {
+          "columns": [
+            "customer_id",
+            "label"
+          ],
+          "name": "uq_addresses_customer_label"
+        }
+      ]
+    },
+    {
+      "columns": [
+        {
+          "autoincrement": true,
+          "category": "INTEGER",
+          "char_length": null,
+          "default": null,
+          "name": "category_id",
+          "nullable": false,
+          "precision": null,
+          "scale": null,
+          "type": "INT"
+        },
+        {
+          "autoincrement": false,
+          "category": "TEXT",
+          "char_length": 60,
+          "default": null,
+          "name": "slug",
+          "nullable": false,
+          "precision": null,
+          "scale": null,
+          "type": "VARCHAR(60)"
+        },
+        {
+          "autoincrement": false,
+          "category": "TEXT",
+          "char_length": 80,
+          "default": null,
+          "name": "name",
+          "nullable": false,
+          "precision": null,
+          "scale": null,
+          "type": "VARCHAR(80)"
+        }
+      ],
+      "foreign_keys": [],
+      "name": "categories",
+      "primary_key": {
+        "columns": [
+          "category_id"
+        ],
+        "name": null
+      },
+      "quoted": true,
+      "uniques": [
+        {
+          "columns": [
+            "slug"
+          ],
+          "name": "uq_categories_slug"
+        }
+      ]
+    },
+    {
+      "columns": [
+        {
+          "autoincrement": true,
+          "category": "INTEGER",
+          "char_length": null,
+          "default": null,
+          "name": "customer_id",
+          "nullable": false,
+          "precision": null,
+          "scale": null,
+          "type": "INT"
+        },
+        {
+          "autoincrement": false,
+          "category": "TEXT",
+          "char_length": 255,
+          "default": null,
+          "name": "email",
+          "nullable": false,
+          "precision": null,
+          "scale": null,
+          "type": "VARCHAR(255)"
+        },
+        {
+          "autoincrement": false,
+          "category": "TEXT",
+          "char_length": 120,
+          "default": null,
+          "name": "name",
+          "nullable": false,
+          "precision": null,
+          "scale": null,
+          "type": "VARCHAR(120)"
+        },
+        {
+          "autoincrement": false,
+          "category": "TEMPORAL",
+          "char_length": null,
+          "default": null,
+          "name": "created_at",
+          "nullable": false,
+          "precision": null,
+          "scale": null,
+          "type": "DATETIME"
+        }
+      ],
+      "foreign_keys": [],
+      "name": "customers",
+      "primary_key": {
+        "columns": [
+          "customer_id"
+        ],
+        "name": null
+      },
+      "quoted": true,
+      "uniques": [
+        {
+          "columns": [
+            "email"
+          ],
+          "name": "uq_customers_email"
+        }
+      ]
+    },
+    {
+      "columns": [
+        {
+          "autoincrement": true,
+          "category": "INTEGER",
+          "char_length": null,
+          "default": null,
+          "name": "event_id",
+          "nullable": false,
+          "precision": null,
+          "scale": null,
+          "type": "BIGINT"
+        },
+        {
+          "autoincrement": false,
+          "category": "INTEGER",
+          "char_length": null,
+          "default": null,
+          "name": "order_id",
+          "nullable": false,
+          "precision": null,
+          "scale": null,
+          "type": "BIGINT"
+        },
+        {
+          "autoincrement": false,
+          "category": "TEXT",
+          "char_length": 30,
+          "default": null,
+          "name": "event_type",
+          "nullable": false,
+          "precision": null,
+          "scale": null,
+          "type": "VARCHAR(30)"
+        },
+        {
+          "autoincrement": false,
+          "category": "JSON",
+          "char_length": null,
+          "default": null,
+          "name": "payload",
+          "nullable": true,
+          "precision": null,
+          "scale": null,
+          "type": "JSON"
+        },
+        {
+          "autoincrement": false,
+          "category": "TEMPORAL",
+          "char_length": null,
+          "default": null,
+          "name": "event_time",
+          "nullable": false,
+          "precision": null,
+          "scale": null,
+          "type": "DATETIME"
+        }
+      ],
+      "foreign_keys": [
+        {
+          "name": "fk_events_order",
+          "on_delete": "CASCADE",
+          "on_update": null,
+          "source_columns": [
+            "order_id"
+          ],
+          "source_table": "order_events",
+          "target_columns": [
+            "order_id"
+          ],
+          "target_table": "orders"
+        }
+      ],
+      "name": "order_events",
+      "primary_key": {
+        "columns": [
+          "event_id"
+        ],
+        "name": null
+      },
+      "quoted": true,
+      "uniques": []
+    },
+    {
+      "columns": [
+        {
+          "autoincrement": false,
+          "category": "INTEGER",
+          "char_length": null,
+          "default": null,
+          "name": "order_id",
+          "nullable": false,
+          "precision": null,
+          "scale": null,
+          "type": "BIGINT"
+        },
+        {
+          "autoincrement": false,
+          "category": "INTEGER",
+          "char_length": null,
+          "default": null,
+          "name": "line_no",
+          "nullable": false,
+          "precision": null,
+          "scale": null,
+          "type": "INT"
+        },
+        {
+          "autoincrement": false,
+          "category": "INTEGER",
+          "char_length": null,
+          "default": null,
+          "name": "product_id",
+          "nullable": false,
+          "precision": null,
+          "scale": null,
+          "type": "INT"
+        },
+        {
+          "autoincrement": false,
+          "category": "INTEGER",
+          "char_length": null,
+          "default": null,
+          "name": "quantity",
+          "nullable": false,
+          "precision": null,
+          "scale": null,
+          "type": "INT"
+        },
+        {
+          "autoincrement": false,
+          "category": "DECIMAL",
+          "char_length": null,
+          "default": null,
+          "name": "unit_price",
+          "nullable": false,
+          "precision": 10,
+          "scale": 2,
+          "type": "DECIMAL(10, 2)"
+        }
+      ],
+      "foreign_keys": [
+        {
+          "name": "fk_items_order",
+          "on_delete": "CASCADE",
+          "on_update": null,
+          "source_columns": [
+            "order_id"
+          ],
+          "source_table": "order_items",
+          "target_columns": [
+            "order_id"
+          ],
+          "target_table": "orders"
+        },
+        {
+          "name": "fk_items_product",
+          "on_delete": null,
+          "on_update": null,
+          "source_columns": [
+            "product_id"
+          ],
+          "source_table": "order_items",
+          "target_columns": [
+            "product_id"
+          ],
+          "target_table": "products"
+        }
+      ],
+      "name": "order_items",
+      "primary_key": {
+        "columns": [
+          "order_id",
+          "line_no"
+        ],
+        "name": null
+      },
+      "quoted": true,
+      "uniques": []
+    },
+    {
+      "columns": [
+        {
+          "autoincrement": true,
+          "category": "INTEGER",
+          "char_length": null,
+          "default": null,
+          "name": "order_id",
+          "nullable": false,
+          "precision": null,
+          "scale": null,
+          "type": "BIGINT"
+        },
+        {
+          "autoincrement": false,
+          "category": "INTEGER",
+          "char_length": null,
+          "default": null,
+          "name": "customer_id",
+          "nullable": false,
+          "precision": null,
+          "scale": null,
+          "type": "INT"
+        },
+        {
+          "autoincrement": false,
+          "category": "TEXT",
+          "char_length": 20,
+          "default": null,
+          "name": "status",
+          "nullable": false,
+          "precision": null,
+          "scale": null,
+          "type": "VARCHAR(20)"
+        },
+        {
+          "autoincrement": false,
+          "category": "TEXT",
+          "char_length": 3,
+          "default": null,
+          "name": "currency",
+          "nullable": false,
+          "precision": null,
+          "scale": null,
+          "type": "CHAR(3)"
+        },
+        {
+          "autoincrement": false,
+          "category": "DECIMAL",
+          "char_length": null,
+          "default": null,
+          "name": "total",
+          "nullable": false,
+          "precision": 12,
+          "scale": 2,
+          "type": "DECIMAL(12, 2)"
+        },
+        {
+          "autoincrement": false,
+          "category": "TEMPORAL",
+          "char_length": null,
+          "default": null,
+          "name": "placed_at",
+          "nullable": false,
+          "precision": null,
+          "scale": null,
+          "type": "DATETIME"
+        }
+      ],
+      "foreign_keys": [
+        {
+          "name": "fk_orders_customer",
+          "on_delete": null,
+          "on_update": null,
+          "source_columns": [
+            "customer_id"
+          ],
+          "source_table": "orders",
+          "target_columns": [
+            "customer_id"
+          ],
+          "target_table": "customers"
+        }
+      ],
+      "name": "orders",
+      "primary_key": {
+        "columns": [
+          "order_id"
+        ],
+        "name": null
+      },
+      "quoted": true,
+      "uniques": []
+    },
+    {
+      "columns": [
+        {
+          "autoincrement": true,
+          "category": "INTEGER",
+          "char_length": null,
+          "default": null,
+          "name": "payment_id",
+          "nullable": false,
+          "precision": null,
+          "scale": null,
+          "type": "BIGINT"
+        },
+        {
+          "autoincrement": false,
+          "category": "INTEGER",
+          "char_length": null,
+          "default": null,
+          "name": "order_id",
+          "nullable": false,
+          "precision": null,
+          "scale": null,
+          "type": "BIGINT"
+        },
+        {
+          "autoincrement": false,
+          "category": "TEXT",
+          "char_length": 20,
+          "default": null,
+          "name": "method",
+          "nullable": false,
+          "precision": null,
+          "scale": null,
+          "type": "VARCHAR(20)"
+        },
+        {
+          "autoincrement": false,
+          "category": "DECIMAL",
+          "char_length": null,
+          "default": null,
+          "name": "amount",
+          "nullable": false,
+          "precision": 12,
+          "scale": 2,
+          "type": "DECIMAL(12, 2)"
+        },
+        {
+          "autoincrement": false,
+          "category": "TEMPORAL",
+          "char_length": null,
+          "default": null,
+          "name": "paid_at",
+          "nullable": false,
+          "precision": null,
+          "scale": null,
+          "type": "DATETIME"
+        }
+      ],
+      "foreign_keys": [
+        {
+          "name": "fk_payments_order",
+          "on_delete": null,
+          "on_update": null,
+          "source_columns": [
+            "order_id"
+          ],
+          "source_table": "payments",
+          "target_columns": [
+            "order_id"
+          ],
+          "target_table": "orders"
+        }
+      ],
+      "name": "payments",
+      "primary_key": {
+        "columns": [
+          "payment_id"
+        ],
+        "name": null
+      },
+      "quoted": true,
+      "uniques": [
+        {
+          "columns": [
+            "order_id"
+          ],
+          "name": "uq_payments_order"
+        }
+      ]
+    },
+    {
+      "columns": [
+        {
+          "autoincrement": false,
+          "category": "INTEGER",
+          "char_length": null,
+          "default": null,
+          "name": "product_id",
+          "nullable": false,
+          "precision": null,
+          "scale": null,
+          "type": "INT"
+        },
+        {
+          "autoincrement": false,
+          "category": "INTEGER",
+          "char_length": null,
+          "default": null,
+          "name": "category_id",
+          "nullable": false,
+          "precision": null,
+          "scale": null,
+          "type": "INT"
+        }
+      ],
+      "foreign_keys": [
+        {
+          "name": "fk_pc_category",
+          "on_delete": "CASCADE",
+          "on_update": null,
+          "source_columns": [
+            "category_id"
+          ],
+          "source_table": "product_categories",
+          "target_columns": [
+            "category_id"
+          ],
+          "target_table": "categories"
+        },
+        {
+          "name": "fk_pc_product",
+          "on_delete": "CASCADE",
+          "on_update": null,
+          "source_columns": [
+            "product_id"
+          ],
+          "source_table": "product_categories",
+          "target_columns": [
+            "product_id"
+          ],
+          "target_table": "products"
+        }
+      ],
+      "name": "product_categories",
+      "primary_key": {
+        "columns": [
+          "product_id",
+          "category_id"
+        ],
+        "name": null
+      },
+      "quoted": true,
+      "uniques": []
+    },
+    {
+      "columns": [
+        {
+          "autoincrement": true,
+          "category": "INTEGER",
+          "char_length": null,
+          "default": null,
+          "name": "product_id",
+          "nullable": false,
+          "precision": null,
+          "scale": null,
+          "type": "INT"
+        },
+        {
+          "autoincrement": false,
+          "category": "TEXT",
+          "char_length": 40,
+          "default": null,
+          "name": "sku",
+          "nullable": false,
+          "precision": null,
+          "scale": null,
+          "type": "VARCHAR(40)"
+        },
+        {
+          "autoincrement": false,
+          "category": "TEXT",
+          "char_length": 200,
+          "default": null,
+          "name": "title",
+          "nullable": false,
+          "precision": null,
+          "scale": null,
+          "type": "VARCHAR(200)"
+        },
+        {
+          "autoincrement": false,
+          "category": "TEXT",
+          "char_length": null,
+          "default": null,
+          "name": "description",
+          "nullable": true,
+          "precision": null,
+          "scale": null,
+          "type": "TEXT"
+        },
+        {
+          "autoincrement": false,
+          "category": "DECIMAL",
+          "char_length": null,
+          "default": null,
+          "name": "price",
+          "nullable": false,
+          "precision": 10,
+          "scale": 2,
+          "type": "DECIMAL(10, 2)"
+        },
+        {
+          "autoincrement": false,
+          "category": "INTEGER",
+          "char_length": null,
+          "default": "0",
+          "name": "stock",
+          "nullable": false,
+          "precision": null,
+          "scale": null,
+          "type": "INT"
+        }
+      ],
+      "foreign_keys": [],
+      "name": "products",
+      "primary_key": {
+        "columns": [
+          "product_id"
+        ],
+        "name": null
+      },
+      "quoted": true,
+      "uniques": [
+        {
+          "columns": [
+            "sku"
+          ],
+          "name": "uq_products_sku"
+        }
+      ]
+    }
+  ]
+}

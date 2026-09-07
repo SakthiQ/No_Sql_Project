@@ -1,0 +1,297 @@
+{
+  "decisions": [
+    {
+      "action": "DUPLICATE",
+      "child": "books",
+      "confidence": "high",
+      "costs": "Renaming a Genres value means a fan-out update across every books document that carries it.",
+      "gains": "Genres is a small, read-only lookup: duplicating (genre_name) into books documents removes the join from hot reads while the code field remains the join key for repairs.",
+      "mitigations": "Lookups like this rarely change; when they do, batch-repair by the join key. The lookup collection can be dropped: nothing in the workload reads it alone.",
+      "near_misses": [],
+      "parent": "Genres",
+      "rule_id": "D05",
+      "rule_name": "SMALL_LOOKUP",
+      "signals": {
+        "cardinality": "1:N",
+        "child": "books",
+        "child_standalone": 0.901,
+        "co_access": 1.0,
+        "duplicated_fields": [
+          "genre_name"
+        ],
+        "est_embedded_size": 6640,
+        "fanout_max": 20,
+        "fanout_min": 1,
+        "fk_name": null,
+        "keep_parent_collection": false,
+        "on_delete": null,
+        "parent": "Genres",
+        "parent_is_lookup": true,
+        "parent_shared": false,
+        "parent_standalone_weight": 0,
+        "unbounded": false,
+        "write_ratio_child": 0.037,
+        "write_ratio_parent": 0.0
+      },
+      "subject": "edge:Genres->books"
+    },
+    {
+      "action": "REFERENCE",
+      "child": "loans",
+      "confidence": "high",
+      "costs": "Reading a parent with its children needs a second query (or $lookup) instead of one document fetch.",
+      "gains": "loans grows without bound (temporal column, no natural cap); keeping it separate avoids the 16 MB document ceiling and whole-document rewrites on every append.",
+      "mitigations": "If recent-children reads matter, add a capped 'recent' array on the parent and treat it as a cache, not the system of record.",
+      "near_misses": [],
+      "parent": "book_copies",
+      "rule_id": "D01",
+      "rule_name": "UNBOUNDED_CHILD",
+      "signals": {
+        "cardinality": "1:N",
+        "child": "loans",
+        "child_standalone": 1.0,
+        "co_access": 0.0,
+        "est_embedded_size": 29400,
+        "fanout_max": null,
+        "fanout_min": 50,
+        "fk_name": null,
+        "on_delete": null,
+        "parent": "book_copies",
+        "parent_is_lookup": false,
+        "parent_shared": false,
+        "unbounded": true,
+        "write_ratio_child": 0.644,
+        "write_ratio_parent": 0.76
+      },
+      "subject": "edge:book_copies->loans"
+    },
+    {
+      "action": "REFERENCE",
+      "child": "book_copies",
+      "confidence": "high",
+      "costs": "The 0% of reads that want both need a second lookup or $lookup stage.",
+      "gains": "100% of book_copies access happens without books \u2014 an embedded copy would force $unwind on more than half the workload.",
+      "mitigations": "If those joined reads are latency-critical, duplicate a small summary of the parent into the child (reads must dominate writes).",
+      "near_misses": [
+        {
+          "detail": "fan-out bounded at ~100 (capped column) \u2014 large but finite",
+          "rule_id": "D01",
+          "rule_name": "UNBOUNDED_CHILD"
+        }
+      ],
+      "parent": "books",
+      "rule_id": "D09",
+      "rule_name": "CHILD_STANDALONE",
+      "signals": {
+        "cardinality": "1:N",
+        "child": "book_copies",
+        "child_standalone": 1.0,
+        "co_access": 0.0,
+        "est_embedded_size": 2800,
+        "fanout_max": 100,
+        "fanout_min": 1,
+        "fk_name": null,
+        "on_delete": null,
+        "parent": "books",
+        "parent_is_lookup": false,
+        "parent_shared": true,
+        "unbounded": false,
+        "write_ratio_child": 0.76,
+        "write_ratio_parent": 0.037
+      },
+      "subject": "edge:books->book_copies"
+    },
+    {
+      "action": "EMBED",
+      "child": "book_details",
+      "confidence": "high",
+      "costs": "book_details loses its own collection; anything that queried it standalone (currently 6%) must go through books.",
+      "gains": "1:1 via a unique foreign key and 57% co-access: two tables that are always read together become one document.",
+      "mitigations": "Keep the child's unique key as an indexed field inside the parent document.",
+      "near_misses": [],
+      "parent": "books",
+      "rule_id": "D04",
+      "rule_name": "ONE_TO_ONE_COACCESSED",
+      "signals": {
+        "cardinality": "1:1",
+        "child": "book_details",
+        "child_standalone": 0.062,
+        "co_access": 0.577,
+        "est_embedded_size": 120,
+        "fanout_max": 1,
+        "fanout_min": 1,
+        "fk_name": null,
+        "on_delete": null,
+        "parent": "books",
+        "parent_is_lookup": false,
+        "parent_shared": true,
+        "unbounded": false,
+        "write_ratio_child": 0.062,
+        "write_ratio_parent": 0.037
+      },
+      "subject": "edge:books->book_details"
+    },
+    {
+      "action": "DUPLICATE",
+      "child": "book_copies",
+      "confidence": "high",
+      "costs": "Renaming a branches value means a fan-out update across every book_copies document that carries it.",
+      "gains": "branches is a small, read-only lookup: duplicating (branch_name, city) into book_copies documents removes the join from hot reads while the code field remains the join key for repairs.",
+      "mitigations": "Lookups like this rarely change; when they do, batch-repair by the join key. The lookup collection can be dropped: nothing in the workload reads it alone.",
+      "near_misses": [
+        {
+          "detail": "fan-out bounded at ~100 (capped column) \u2014 large but finite",
+          "rule_id": "D01",
+          "rule_name": "UNBOUNDED_CHILD"
+        }
+      ],
+      "parent": "branches",
+      "rule_id": "D05",
+      "rule_name": "SMALL_LOOKUP",
+      "signals": {
+        "cardinality": "1:N",
+        "child": "book_copies",
+        "child_standalone": 0.76,
+        "co_access": 1.0,
+        "duplicated_fields": [
+          "branch_name",
+          "city"
+        ],
+        "est_embedded_size": 2800,
+        "fanout_max": 100,
+        "fanout_min": 1,
+        "fk_name": null,
+        "keep_parent_collection": false,
+        "on_delete": null,
+        "parent": "branches",
+        "parent_is_lookup": true,
+        "parent_shared": false,
+        "parent_standalone_weight": 0,
+        "unbounded": false,
+        "write_ratio_child": 0.76,
+        "write_ratio_parent": 0.0
+      },
+      "subject": "edge:branches->book_copies"
+    },
+    {
+      "action": "REFERENCE",
+      "child": "loans",
+      "confidence": "high",
+      "costs": "Reading a parent with its children needs a second query (or $lookup) instead of one document fetch.",
+      "gains": "loans grows without bound (temporal column, no natural cap); keeping it separate avoids the 16 MB document ceiling and whole-document rewrites on every append.",
+      "mitigations": "If recent-children reads matter, add a capped 'recent' array on the parent and treat it as a cache, not the system of record.",
+      "near_misses": [],
+      "parent": "members",
+      "rule_id": "D01",
+      "rule_name": "UNBOUNDED_CHILD",
+      "signals": {
+        "cardinality": "1:N",
+        "child": "loans",
+        "child_standalone": 1.0,
+        "co_access": 0.0,
+        "est_embedded_size": 29400,
+        "fanout_max": null,
+        "fanout_min": 50,
+        "fk_name": "fk_loans_member",
+        "on_delete": null,
+        "parent": "members",
+        "parent_is_lookup": false,
+        "parent_shared": false,
+        "unbounded": true,
+        "write_ratio_child": 0.644,
+        "write_ratio_parent": 0.0
+      },
+      "subject": "edge:members->loans"
+    },
+    {
+      "action": "FOLD",
+      "child": "book_authors",
+      "confidence": "high",
+      "costs": "Removing a authors from the vocabulary means updating every host document that carries it; the array index is multikey.",
+      "gains": "authors is a bounded vocabulary: an array of ids + full_name on each books document answers the co-accessed reads in one fetch, one-way (no dual arrays to keep consistent).",
+      "mitigations": "Vocabulary changes are rare; repair by scanning the array field when they happen.",
+      "near_misses": [],
+      "parent": "books",
+      "rule_id": "D07",
+      "rule_name": "JUNCTION_SMALL_SIDE",
+      "signals": {
+        "bounded_side": "authors",
+        "duplicated_fields": [
+          "full_name"
+        ],
+        "host": "books",
+        "keep_bounded_collection": true,
+        "sides": [
+          "authors",
+          "books"
+        ]
+      },
+      "subject": "junction:book_authors"
+    }
+  ],
+  "dispositions": [
+    {
+      "disposition": "dropped",
+      "into": "books",
+      "reason": "pure lookup: display fields duplicated into books; nothing in the workload reads or writes it standalone",
+      "rule_id": "D05",
+      "table": "Genres"
+    },
+    {
+      "disposition": "collection",
+      "into": null,
+      "reason": "bounded junction side: array of refs duplicated into books; collection kept (standalone reads exist)",
+      "rule_id": "D07",
+      "table": "authors"
+    },
+    {
+      "disposition": "folded",
+      "into": "books",
+      "reason": "junction folded into books (one-way array)",
+      "rule_id": "D07",
+      "table": "book_authors"
+    },
+    {
+      "disposition": "collection",
+      "into": null,
+      "reason": "root or standalone entity: its own collection",
+      "rule_id": "T00",
+      "table": "book_copies"
+    },
+    {
+      "disposition": "embedded",
+      "into": "books",
+      "reason": "embedded into books documents",
+      "rule_id": "D04",
+      "table": "book_details"
+    },
+    {
+      "disposition": "collection",
+      "into": null,
+      "reason": "root or standalone entity: its own collection",
+      "rule_id": "T00",
+      "table": "books"
+    },
+    {
+      "disposition": "dropped",
+      "into": "book_copies",
+      "reason": "pure lookup: display fields duplicated into book_copies; nothing in the workload reads or writes it standalone",
+      "rule_id": "D05",
+      "table": "branches"
+    },
+    {
+      "disposition": "collection",
+      "into": null,
+      "reason": "root or standalone entity: its own collection",
+      "rule_id": "T00",
+      "table": "loans"
+    },
+    {
+      "disposition": "collection",
+      "into": null,
+      "reason": "root or standalone entity: its own collection",
+      "rule_id": "T00",
+      "table": "members"
+    }
+  ]
+}

@@ -1,0 +1,294 @@
+{
+  "junctions": {
+    "product_categories": {
+      "has_payload": false,
+      "sides": [
+        "categories",
+        "products"
+      ]
+    }
+  },
+  "relationships": [
+    {
+      "cardinality": "1:N",
+      "child": "addresses",
+      "child_standalone": 0.0,
+      "co_access": 0.647,
+      "est_embedded_size": 7560,
+      "fanout_max": 20,
+      "fanout_min": 1,
+      "fk_name": "fk_addresses_customer",
+      "on_delete": "CASCADE",
+      "parent": "customers",
+      "parent_is_lookup": false,
+      "parent_shared": true,
+      "unbounded": false,
+      "write_ratio_child": 0.0,
+      "write_ratio_parent": 0.0
+    },
+    {
+      "cardinality": "1:N",
+      "child": "orders",
+      "child_standalone": 0.903,
+      "co_access": 0.353,
+      "est_embedded_size": 50400,
+      "fanout_max": null,
+      "fanout_min": 50,
+      "fk_name": "fk_orders_customer",
+      "on_delete": null,
+      "parent": "customers",
+      "parent_is_lookup": false,
+      "parent_shared": true,
+      "unbounded": true,
+      "write_ratio_child": 0.282,
+      "write_ratio_parent": 0.0
+    },
+    {
+      "cardinality": "1:N",
+      "child": "product_categories",
+      "child_standalone": 0.0,
+      "co_access": 0.727,
+      "est_embedded_size": 160,
+      "fanout_max": 20,
+      "fanout_min": 1,
+      "fk_name": "fk_pc_product",
+      "on_delete": "CASCADE",
+      "parent": "products",
+      "parent_is_lookup": false,
+      "parent_shared": true,
+      "unbounded": false,
+      "write_ratio_child": 0.0,
+      "write_ratio_parent": 0.083
+    },
+    {
+      "cardinality": "1:N",
+      "child": "product_categories",
+      "child_standalone": 1.0,
+      "co_access": 0.0,
+      "est_embedded_size": 160,
+      "fanout_max": 20,
+      "fanout_min": 1,
+      "fk_name": "fk_pc_category",
+      "on_delete": "CASCADE",
+      "parent": "categories",
+      "parent_is_lookup": true,
+      "parent_shared": false,
+      "unbounded": false,
+      "write_ratio_child": 0.0,
+      "write_ratio_parent": 0.0
+    },
+    {
+      "cardinality": "1:N",
+      "child": "order_items",
+      "child_standalone": 0.333,
+      "co_access": 0.674,
+      "est_embedded_size": 2600,
+      "fanout_max": 100,
+      "fanout_min": 1,
+      "fk_name": "fk_items_order",
+      "on_delete": "CASCADE",
+      "parent": "orders",
+      "parent_is_lookup": false,
+      "parent_shared": true,
+      "unbounded": false,
+      "write_ratio_child": 0.333,
+      "write_ratio_parent": 0.282
+    },
+    {
+      "cardinality": "1:N",
+      "child": "order_items",
+      "child_standalone": 1.0,
+      "co_access": 0.0,
+      "est_embedded_size": 2600,
+      "fanout_max": 100,
+      "fanout_min": 1,
+      "fk_name": "fk_items_product",
+      "on_delete": null,
+      "parent": "products",
+      "parent_is_lookup": false,
+      "parent_shared": true,
+      "unbounded": false,
+      "write_ratio_child": 0.333,
+      "write_ratio_parent": 0.083
+    },
+    {
+      "cardinality": "1:1",
+      "child": "payments",
+      "child_standalone": 0.571,
+      "co_access": 0.034,
+      "est_embedded_size": 88,
+      "fanout_max": 1,
+      "fanout_min": 1,
+      "fk_name": "fk_payments_order",
+      "on_delete": null,
+      "parent": "orders",
+      "parent_is_lookup": false,
+      "parent_shared": true,
+      "unbounded": false,
+      "write_ratio_child": 0.571,
+      "write_ratio_parent": 0.282
+    },
+    {
+      "cardinality": "1:N",
+      "child": "order_events",
+      "child_standalone": 1.0,
+      "co_access": 0.0,
+      "est_embedded_size": 178500,
+      "fanout_max": null,
+      "fanout_min": 50,
+      "fk_name": "fk_events_order",
+      "on_delete": "CASCADE",
+      "parent": "orders",
+      "parent_is_lookup": false,
+      "parent_shared": true,
+      "unbounded": true,
+      "write_ratio_child": 0.893,
+      "write_ratio_parent": 0.282
+    }
+  ],
+  "tables": {
+    "addresses": {
+      "has_hierarchy": false,
+      "incoming": [],
+      "is_junction": false,
+      "is_lookup": false,
+      "outgoing": [
+        "customers"
+      ],
+      "read_weight": 22.0,
+      "role": "child",
+      "row_width": 756,
+      "standalone_weight": 0,
+      "write_ratio": 0.0,
+      "write_weight": 0
+    },
+    "categories": {
+      "has_hierarchy": false,
+      "incoming": [
+        "product_categories"
+      ],
+      "is_junction": false,
+      "is_lookup": true,
+      "outgoing": [],
+      "read_weight": 5.0,
+      "role": "lookup",
+      "row_width": 288,
+      "standalone_weight": 5.0,
+      "write_ratio": 0.0,
+      "write_weight": 0
+    },
+    "customers": {
+      "has_hierarchy": false,
+      "incoming": [
+        "addresses",
+        "orders"
+      ],
+      "is_junction": false,
+      "is_lookup": false,
+      "outgoing": [],
+      "read_weight": 34.0,
+      "role": "parent",
+      "row_width": 766,
+      "standalone_weight": 0,
+      "write_ratio": 0.0,
+      "write_weight": 0
+    },
+    "order_events": {
+      "has_hierarchy": false,
+      "incoming": [],
+      "is_junction": false,
+      "is_lookup": false,
+      "outgoing": [
+        "orders"
+      ],
+      "read_weight": 3.0,
+      "role": "child",
+      "row_width": 340,
+      "standalone_weight": 28.0,
+      "write_ratio": 0.893,
+      "write_weight": 25.0
+    },
+    "order_items": {
+      "has_hierarchy": false,
+      "incoming": [],
+      "is_junction": false,
+      "is_lookup": false,
+      "outgoing": [
+        "orders",
+        "products"
+      ],
+      "read_weight": 60.0,
+      "role": "child",
+      "row_width": 52,
+      "standalone_weight": 30.0,
+      "write_ratio": 0.333,
+      "write_weight": 30.0
+    },
+    "orders": {
+      "has_hierarchy": false,
+      "incoming": [
+        "order_events",
+        "order_items",
+        "payments"
+      ],
+      "is_junction": false,
+      "is_lookup": false,
+      "outgoing": [
+        "customers"
+      ],
+      "read_weight": 89.0,
+      "role": "hub",
+      "row_width": 96,
+      "standalone_weight": 49.0,
+      "write_ratio": 0.282,
+      "write_weight": 35.0
+    },
+    "payments": {
+      "has_hierarchy": false,
+      "incoming": [],
+      "is_junction": false,
+      "is_lookup": false,
+      "outgoing": [
+        "orders"
+      ],
+      "read_weight": 3.0,
+      "role": "child",
+      "row_width": 88,
+      "standalone_weight": 4.0,
+      "write_ratio": 0.571,
+      "write_weight": 4.0
+    },
+    "product_categories": {
+      "has_hierarchy": false,
+      "incoming": [],
+      "is_junction": true,
+      "is_lookup": false,
+      "outgoing": [
+        "categories",
+        "products"
+      ],
+      "read_weight": 16.0,
+      "role": "junction",
+      "row_width": 16,
+      "standalone_weight": 0,
+      "write_ratio": 0.0,
+      "write_weight": 0
+    },
+    "products": {
+      "has_hierarchy": false,
+      "incoming": [
+        "order_items",
+        "product_categories"
+      ],
+      "is_junction": false,
+      "is_lookup": false,
+      "outgoing": [],
+      "read_weight": 22.0,
+      "role": "parent",
+      "row_width": 580,
+      "standalone_weight": 8.0,
+      "write_ratio": 0.083,
+      "write_weight": 2.0
+    }
+  }
+}
