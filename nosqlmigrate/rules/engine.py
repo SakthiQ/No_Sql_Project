@@ -282,11 +282,11 @@ def _dispositions(analysis: Analysis, result: DecisionSet) -> dict[str, Disposit
                 f"embedded into {embedded.parent} documents",
             )
         elif dup_decisions and standalone(table) == 0 and (stats is None or stats.write_weight == 0):
-            targets = ", ".join(sorted({d.child or "?" for d in dup_decisions}))
+            targets = sorted({d.child or "?" for d in dup_decisions})
             out[table] = Disposition(
-                table, "dropped", None, dup_decisions[0].rule_id,
-                f"pure lookup: display fields duplicated into {targets}; nothing in "
-                f"the workload reads or writes it standalone",
+                table, "dropped", targets[0], dup_decisions[0].rule_id,
+                f"pure lookup: display fields duplicated into {', '.join(targets)}; "
+                f"nothing in the workload reads or writes it standalone",
             )
         elif dup_decisions:
             targets = ", ".join(sorted({d.child or "?" for d in dup_decisions}))

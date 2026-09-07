@@ -198,7 +198,7 @@
     },
     {
       "disposition": "dropped",
-      "into": null,
+      "into": "posts",
       "reason": "pure lookup: display fields duplicated into posts; nothing in the workload reads or writes it standalone",
       "rule_id": "D05",
       "table": "categories"

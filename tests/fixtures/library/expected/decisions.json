@@ -232,7 +232,7 @@
   "dispositions": [
     {
       "disposition": "dropped",
-      "into": null,
+      "into": "books",
       "reason": "pure lookup: display fields duplicated into books; nothing in the workload reads or writes it standalone",
       "rule_id": "D05",
       "table": "Genres"
@@ -274,7 +274,7 @@
     },
     {
       "disposition": "dropped",
-      "into": null,
+      "into": "book_copies",
       "reason": "pure lookup: display fields duplicated into book_copies; nothing in the workload reads or writes it standalone",
       "rule_id": "D05",
       "table": "branches"
