@@ -1,0 +1,242 @@
+{
+  "decisions": [
+    {
+      "action": "REFERENCE",
+      "child": "posts",
+      "confidence": "high",
+      "costs": "Reading a parent with its children needs a second query (or $lookup) instead of one document fetch.",
+      "gains": "posts grows without bound (temporal column, no natural cap); keeping it separate avoids the 16 MB document ceiling and whole-document rewrites on every append.",
+      "mitigations": "If recent-children reads matter, add a capped 'recent' array on the parent and treat it as a cache, not the system of record.",
+      "near_misses": [],
+      "parent": "authors",
+      "rule_id": "D01",
+      "rule_name": "UNBOUNDED_CHILD",
+      "signals": {
+        "cardinality": "1:N",
+        "child": "posts",
+        "child_standalone": 1.0,
+        "co_access": 0.0,
+        "est_embedded_size": 499800,
+        "fanout_max": null,
+        "fanout_min": 50,
+        "fk_name": "fk_posts_author",
+        "on_delete": null,
+        "parent": "authors",
+        "parent_is_lookup": false,
+        "parent_shared": false,
+        "unbounded": true,
+        "write_ratio_child": 0.2,
+        "write_ratio_parent": 0.0
+      },
+      "subject": "edge:authors->posts"
+    },
+    {
+      "action": "DUPLICATE",
+      "child": "posts",
+      "confidence": "high",
+      "costs": "Renaming a categories value means a fan-out update across every posts document that carries it.",
+      "gains": "categories is a small, read-only lookup: duplicating (name) into posts documents removes the join from hot reads while the code field remains the join key for repairs.",
+      "mitigations": "Lookups like this rarely change; when they do, batch-repair by the join key. The lookup collection can be dropped: nothing in the workload reads it alone.",
+      "near_misses": [],
+      "parent": "categories",
+      "rule_id": "D05",
+      "rule_name": "SMALL_LOOKUP",
+      "signals": {
+        "cardinality": "1:N",
+        "child": "posts",
+        "child_standalone": 1.0,
+        "co_access": 0.0,
+        "duplicated_fields": [
+          "name"
+        ],
+        "est_embedded_size": 499800,
+        "fanout_max": null,
+        "fanout_min": 50,
+        "fk_name": null,
+        "keep_parent_collection": false,
+        "on_delete": "SET NULL",
+        "parent": "categories",
+        "parent_is_lookup": true,
+        "parent_shared": false,
+        "parent_standalone_weight": 0,
+        "unbounded": true,
+        "write_ratio_child": 0.2,
+        "write_ratio_parent": 0.0
+      },
+      "subject": "edge:categories->posts"
+    },
+    {
+      "action": "REFERENCE",
+      "child": "comments",
+      "confidence": "high",
+      "costs": "Recursive traversal (whole subtrees) needs recursive CTEs in SQL and $graphLookup in MongoDB \u2014 neither is free.",
+      "gains": "Adjacency lists are index-friendly, handle arbitrary depth, and match how comment threads and org charts are actually queried.",
+      "mitigations": "If whole-subtree reads dominate, maintain a materialized path field (path '/a/b/c') as a derived, repairable index.",
+      "near_misses": [],
+      "parent": "comments",
+      "rule_id": "S01",
+      "rule_name": "SELF_REFERENCE",
+      "signals": {
+        "cardinality": "1:N",
+        "child": "comments",
+        "child_standalone": 0.0,
+        "co_access": 1.0,
+        "est_embedded_size": 318150,
+        "fanout_max": null,
+        "fanout_min": 50,
+        "fk_name": null,
+        "on_delete": "CASCADE",
+        "parent": "comments",
+        "parent_is_lookup": false,
+        "parent_shared": false,
+        "self_reference": true,
+        "unbounded": true,
+        "write_ratio_child": 0.441,
+        "write_ratio_parent": 0.441
+      },
+      "subject": "edge:comments->comments"
+    },
+    {
+      "action": "REFERENCE",
+      "child": "comments",
+      "confidence": "high",
+      "costs": "Reading a parent with its children needs a second query (or $lookup) instead of one document fetch.",
+      "gains": "comments grows without bound (temporal column, no natural cap); keeping it separate avoids the 16 MB document ceiling and whole-document rewrites on every append.",
+      "mitigations": "If recent-children reads matter, add a capped 'recent' array on the parent and treat it as a cache, not the system of record.",
+      "near_misses": [
+        {
+          "detail": "child standalone 0.49 just under 0.50",
+          "rule_id": "D09",
+          "rule_name": "CHILD_STANDALONE"
+        }
+      ],
+      "parent": "posts",
+      "rule_id": "D01",
+      "rule_name": "UNBOUNDED_CHILD",
+      "signals": {
+        "cardinality": "1:N",
+        "child": "comments",
+        "child_standalone": 0.485,
+        "co_access": 0.398,
+        "est_embedded_size": 318150,
+        "fanout_max": null,
+        "fanout_min": 50,
+        "fk_name": "fk_comments_post",
+        "on_delete": "CASCADE",
+        "parent": "posts",
+        "parent_is_lookup": false,
+        "parent_shared": true,
+        "unbounded": true,
+        "write_ratio_child": 0.441,
+        "write_ratio_parent": 0.2
+      },
+      "subject": "edge:posts->comments"
+    },
+    {
+      "action": "REFERENCE",
+      "child": "page_views",
+      "confidence": "high",
+      "costs": "Reading a parent with its children needs a second query (or $lookup) instead of one document fetch.",
+      "gains": "page_views grows without bound (temporal column, no natural cap); keeping it separate avoids the 16 MB document ceiling and whole-document rewrites on every append.",
+      "mitigations": "If recent-children reads matter, add a capped 'recent' array on the parent and treat it as a cache, not the system of record.",
+      "near_misses": [],
+      "parent": "posts",
+      "rule_id": "D01",
+      "rule_name": "UNBOUNDED_CHILD",
+      "signals": {
+        "cardinality": "1:N",
+        "child": "page_views",
+        "child_standalone": 1.0,
+        "co_access": 0.0,
+        "est_embedded_size": 42000,
+        "fanout_max": null,
+        "fanout_min": 50,
+        "fk_name": null,
+        "on_delete": null,
+        "parent": "posts",
+        "parent_is_lookup": false,
+        "parent_shared": true,
+        "unbounded": true,
+        "write_ratio_child": 0.455,
+        "write_ratio_parent": 0.2
+      },
+      "subject": "edge:posts->page_views"
+    },
+    {
+      "action": "FOLD",
+      "child": "post_tags",
+      "confidence": "high",
+      "costs": "Removing a tags from the vocabulary means updating every host document that carries it; the array index is multikey.",
+      "gains": "tags is a bounded vocabulary: an array of ids + name on each posts document answers the co-accessed reads in one fetch, one-way (no dual arrays to keep consistent).",
+      "mitigations": "Vocabulary changes are rare; repair by scanning the array field when they happen.",
+      "near_misses": [],
+      "parent": "posts",
+      "rule_id": "D07",
+      "rule_name": "JUNCTION_SMALL_SIDE",
+      "signals": {
+        "bounded_side": "tags",
+        "duplicated_fields": [
+          "name"
+        ],
+        "host": "posts",
+        "keep_bounded_collection": false,
+        "sides": [
+          "posts",
+          "tags"
+        ]
+      },
+      "subject": "junction:post_tags"
+    }
+  ],
+  "dispositions": [
+    {
+      "disposition": "collection",
+      "into": null,
+      "reason": "root or standalone entity: its own collection",
+      "rule_id": "T00",
+      "table": "authors"
+    },
+    {
+      "disposition": "dropped",
+      "into": null,
+      "reason": "pure lookup: display fields duplicated into posts; nothing in the workload reads or writes it standalone",
+      "rule_id": "D05",
+      "table": "categories"
+    },
+    {
+      "disposition": "collection",
+      "into": null,
+      "reason": "root or standalone entity: its own collection",
+      "rule_id": "T00",
+      "table": "comments"
+    },
+    {
+      "disposition": "collection",
+      "into": null,
+      "reason": "root or standalone entity: its own collection",
+      "rule_id": "T00",
+      "table": "page_views"
+    },
+    {
+      "disposition": "folded",
+      "into": "posts",
+      "reason": "junction folded into posts (one-way array)",
+      "rule_id": "D07",
+      "table": "post_tags"
+    },
+    {
+      "disposition": "collection",
+      "into": null,
+      "reason": "root or standalone entity: its own collection",
+      "rule_id": "T00",
+      "table": "posts"
+    },
+    {
+      "disposition": "dropped",
+      "into": "posts",
+      "reason": "bounded junction side with no standalone access: its fields live inside posts documents only",
+      "rule_id": "D07",
+      "table": "tags"
+    }
+  ]
+}

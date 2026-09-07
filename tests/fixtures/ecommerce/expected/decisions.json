@@ -1,0 +1,294 @@
+{
+  "decisions": [
+    {
+      "action": "EMBED",
+      "child": "addresses",
+      "confidence": "medium",
+      "costs": "addresses can no longer be queried independently without $unwind; every child edit rewrites the parent document; child-level indexes become multikey.",
+      "gains": "64% of customers reads also need addresses; embedding serves them with a single document fetch and makes parent+children writes atomic without transactions.",
+      "mitigations": "If child-level analytics appear later, add a rollup collection rather than un-embedding.",
+      "near_misses": [],
+      "parent": "customers",
+      "rule_id": "D03",
+      "rule_name": "CONTAINED_1N",
+      "signals": {
+        "cardinality": "1:N",
+        "child": "addresses",
+        "child_standalone": 0.0,
+        "co_access": 0.647,
+        "est_embedded_size": 7560,
+        "fanout_max": 20,
+        "fanout_min": 1,
+        "fk_name": "fk_addresses_customer",
+        "on_delete": "CASCADE",
+        "parent": "customers",
+        "parent_is_lookup": false,
+        "parent_shared": true,
+        "unbounded": false,
+        "write_ratio_child": 0.0,
+        "write_ratio_parent": 0.0
+      },
+      "subject": "edge:customers->addresses"
+    },
+    {
+      "action": "REFERENCE",
+      "child": "orders",
+      "confidence": "high",
+      "costs": "Reading a parent with its children needs a second query (or $lookup) instead of one document fetch.",
+      "gains": "orders grows without bound (temporal column, no natural cap); keeping it separate avoids the 16 MB document ceiling and whole-document rewrites on every append.",
+      "mitigations": "If recent-children reads matter, add a capped 'recent' array on the parent and treat it as a cache, not the system of record.",
+      "near_misses": [
+        {
+          "detail": "estimated embedded size 49 KB within 25% of the 64 KB soft limit",
+          "rule_id": "D02",
+          "rule_name": "SIZE_RISK"
+        }
+      ],
+      "parent": "customers",
+      "rule_id": "D01",
+      "rule_name": "UNBOUNDED_CHILD",
+      "signals": {
+        "cardinality": "1:N",
+        "child": "orders",
+        "child_standalone": 0.903,
+        "co_access": 0.353,
+        "est_embedded_size": 50400,
+        "fanout_max": null,
+        "fanout_min": 50,
+        "fk_name": "fk_orders_customer",
+        "on_delete": null,
+        "parent": "customers",
+        "parent_is_lookup": false,
+        "parent_shared": true,
+        "unbounded": true,
+        "write_ratio_child": 0.282,
+        "write_ratio_parent": 0.0
+      },
+      "subject": "edge:customers->orders"
+    },
+    {
+      "action": "REFERENCE",
+      "child": "order_events",
+      "confidence": "high",
+      "costs": "Reading a parent with its children needs a second query (or $lookup) instead of one document fetch.",
+      "gains": "order_events grows without bound (temporal column, no natural cap); keeping it separate avoids the 16 MB document ceiling and whole-document rewrites on every append.",
+      "mitigations": "If recent-children reads matter, add a capped 'recent' array on the parent and treat it as a cache, not the system of record.",
+      "near_misses": [],
+      "parent": "orders",
+      "rule_id": "D01",
+      "rule_name": "UNBOUNDED_CHILD",
+      "signals": {
+        "cardinality": "1:N",
+        "child": "order_events",
+        "child_standalone": 1.0,
+        "co_access": 0.0,
+        "est_embedded_size": 178500,
+        "fanout_max": null,
+        "fanout_min": 50,
+        "fk_name": "fk_events_order",
+        "on_delete": "CASCADE",
+        "parent": "orders",
+        "parent_is_lookup": false,
+        "parent_shared": true,
+        "unbounded": true,
+        "write_ratio_child": 0.893,
+        "write_ratio_parent": 0.282
+      },
+      "subject": "edge:orders->order_events"
+    },
+    {
+      "action": "EMBED",
+      "child": "order_items",
+      "confidence": "medium",
+      "costs": "order_items can no longer be queried independently without $unwind; every child edit rewrites the parent document; child-level indexes become multikey.",
+      "gains": "67% of orders reads also need order_items; embedding serves them with a single document fetch and makes parent+children writes atomic without transactions.",
+      "mitigations": "If child-level analytics appear later, add a rollup collection rather than un-embedding.",
+      "near_misses": [
+        {
+          "detail": "fan-out bounded at ~100 (capped column) \u2014 large but finite",
+          "rule_id": "D01",
+          "rule_name": "UNBOUNDED_CHILD"
+        }
+      ],
+      "parent": "orders",
+      "rule_id": "D03",
+      "rule_name": "CONTAINED_1N",
+      "signals": {
+        "cardinality": "1:N",
+        "child": "order_items",
+        "child_standalone": 0.333,
+        "co_access": 0.674,
+        "est_embedded_size": 2600,
+        "fanout_max": 100,
+        "fanout_min": 1,
+        "fk_name": "fk_items_order",
+        "on_delete": "CASCADE",
+        "parent": "orders",
+        "parent_is_lookup": false,
+        "parent_shared": true,
+        "unbounded": false,
+        "write_ratio_child": 0.333,
+        "write_ratio_parent": 0.282
+      },
+      "subject": "edge:orders->order_items"
+    },
+    {
+      "action": "REFERENCE",
+      "child": "payments",
+      "confidence": "medium",
+      "costs": "The 3% of reads that want both need a second lookup or $lookup stage.",
+      "gains": "57% of payments access happens without orders \u2014 an embedded copy would force $unwind on more than half the workload.",
+      "mitigations": "If those joined reads are latency-critical, duplicate a small summary of the parent into the child (reads must dominate writes).",
+      "near_misses": [],
+      "parent": "orders",
+      "rule_id": "D09",
+      "rule_name": "CHILD_STANDALONE",
+      "signals": {
+        "cardinality": "1:1",
+        "child": "payments",
+        "child_standalone": 0.571,
+        "co_access": 0.034,
+        "est_embedded_size": 88,
+        "fanout_max": 1,
+        "fanout_min": 1,
+        "fk_name": "fk_payments_order",
+        "on_delete": null,
+        "parent": "orders",
+        "parent_is_lookup": false,
+        "parent_shared": true,
+        "unbounded": false,
+        "write_ratio_child": 0.571,
+        "write_ratio_parent": 0.282
+      },
+      "subject": "edge:orders->payments"
+    },
+    {
+      "action": "REFERENCE",
+      "child": "order_items",
+      "confidence": "high",
+      "costs": "The referenced parent cannot be reached by a covered query on the embedded child alone.",
+      "gains": "order_items is already embedded under 'orders'; the foreign-key field rides along inside the embedded documents with no extra lookup.",
+      "mitigations": "None needed \u2014 this is the standard shape for embedded sub-documents that reference other collections.",
+      "near_misses": [
+        {
+          "detail": "fan-out bounded at ~100 (capped column) \u2014 large but finite",
+          "rule_id": "D01",
+          "rule_name": "UNBOUNDED_CHILD"
+        }
+      ],
+      "parent": "products",
+      "rule_id": "R00",
+      "rule_name": "DEFAULT_REFERENCE",
+      "signals": {
+        "cardinality": "1:N",
+        "child": "order_items",
+        "child_standalone": 1.0,
+        "co_access": 0.0,
+        "embedded_under": "orders",
+        "est_embedded_size": 2600,
+        "fanout_max": 100,
+        "fanout_min": 1,
+        "fk_name": "fk_items_product",
+        "on_delete": null,
+        "parent": "products",
+        "parent_is_lookup": false,
+        "parent_shared": true,
+        "unbounded": false,
+        "write_ratio_child": 0.333,
+        "write_ratio_parent": 0.083
+      },
+      "subject": "edge:products->order_items"
+    },
+    {
+      "action": "FOLD",
+      "child": "product_categories",
+      "confidence": "high",
+      "costs": "Removing a categories from the vocabulary means updating every host document that carries it; the array index is multikey.",
+      "gains": "categories is a bounded vocabulary: an array of ids + slug, name on each products document answers the co-accessed reads in one fetch, one-way (no dual arrays to keep consistent).",
+      "mitigations": "Vocabulary changes are rare; repair by scanning the array field when they happen.",
+      "near_misses": [],
+      "parent": "products",
+      "rule_id": "D07",
+      "rule_name": "JUNCTION_SMALL_SIDE",
+      "signals": {
+        "bounded_side": "categories",
+        "duplicated_fields": [
+          "slug",
+          "name"
+        ],
+        "host": "products",
+        "keep_bounded_collection": true,
+        "sides": [
+          "categories",
+          "products"
+        ]
+      },
+      "subject": "junction:product_categories"
+    }
+  ],
+  "dispositions": [
+    {
+      "disposition": "embedded",
+      "into": "customers",
+      "reason": "embedded into customers documents",
+      "rule_id": "D03",
+      "table": "addresses"
+    },
+    {
+      "disposition": "collection",
+      "into": null,
+      "reason": "bounded junction side: array of refs duplicated into products; collection kept (standalone reads exist)",
+      "rule_id": "D07",
+      "table": "categories"
+    },
+    {
+      "disposition": "collection",
+      "into": null,
+      "reason": "root or standalone entity: its own collection",
+      "rule_id": "T00",
+      "table": "customers"
+    },
+    {
+      "disposition": "collection",
+      "into": null,
+      "reason": "root or standalone entity: its own collection",
+      "rule_id": "T00",
+      "table": "order_events"
+    },
+    {
+      "disposition": "embedded",
+      "into": "orders",
+      "reason": "embedded into orders documents",
+      "rule_id": "D03",
+      "table": "order_items"
+    },
+    {
+      "disposition": "collection",
+      "into": null,
+      "reason": "root or standalone entity: its own collection",
+      "rule_id": "T00",
+      "table": "orders"
+    },
+    {
+      "disposition": "collection",
+      "into": null,
+      "reason": "root or standalone entity: its own collection",
+      "rule_id": "T00",
+      "table": "payments"
+    },
+    {
+      "disposition": "folded",
+      "into": "products",
+      "reason": "junction folded into products (one-way array)",
+      "rule_id": "D07",
+      "table": "product_categories"
+    },
+    {
+      "disposition": "collection",
+      "into": null,
+      "reason": "root or standalone entity: its own collection",
+      "rule_id": "T00",
+      "table": "products"
+    }
+  ]
+}
