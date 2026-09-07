@@ -15,7 +15,7 @@ ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
 
 from nosqlmigrate.parsing.ddl import parse_ddl  # noqa: E402
-from tests.conftest import FIXTURES, FIXTURE_NAMES  # noqa: E402
+from tests.conftest import FIXTURE_NAMES, FIXTURES  # noqa: E402
 
 
 def dump(obj) -> str:

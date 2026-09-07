@@ -18,8 +18,8 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 
 from sqlglot import exp
-from sqlglot.errors import ParseError
 from sqlglot import parse as sqlglot_parse
+from sqlglot.errors import ParseError
 
 from ..core import diagnostics as diag
 from ..core.identifiers import Identifier

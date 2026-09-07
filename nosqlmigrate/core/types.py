@@ -6,10 +6,10 @@ spelling, and the rules reason over the category.
 """
 from __future__ import annotations
 
-from enum import Enum
+from enum import StrEnum
 
 
-class TypeCategory(str, Enum):
+class TypeCategory(StrEnum):
     INTEGER = "INTEGER"
     DECIMAL = "DECIMAL"
     TEXT = "TEXT"

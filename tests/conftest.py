@@ -4,9 +4,9 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
-from nosqlmigrate.parsing.ddl import parse_ddl
-
 import pytest
+
+from nosqlmigrate.parsing.ddl import parse_ddl
 
 FIXTURES = Path(__file__).parent / "fixtures"
 FIXTURE_NAMES = ("ecommerce", "blog", "library")

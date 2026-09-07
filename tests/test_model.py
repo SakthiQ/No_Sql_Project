@@ -1,7 +1,14 @@
 """The is_unique truth table: all five declaration paths converge here, and
 subsets of composite keys must NOT count as unique."""
 from nosqlmigrate.core.identifiers import Identifier
-from nosqlmigrate.core.model import Column, PrimaryKey, RelationalModel, Table, UniqueConstraint, make_column
+from nosqlmigrate.core.model import (
+    Column,
+    PrimaryKey,
+    RelationalModel,
+    Table,
+    UniqueConstraint,
+    make_column,
+)
 from nosqlmigrate.core.types import TypeCategory
 
 

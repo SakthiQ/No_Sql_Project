@@ -5,7 +5,7 @@ that must be a deliberate act with a written justification, because every
 later golden file (decisions, emitters) builds on this one."""
 from __future__ import annotations
 
-from tests.conftest import assert_matches_golden, FIXTURE_NAMES
+from tests.conftest import assert_matches_golden
 
 
 def test_golden_model_snapshots(fixture_name, request):

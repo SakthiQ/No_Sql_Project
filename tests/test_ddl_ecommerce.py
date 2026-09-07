@@ -3,8 +3,6 @@ columns encode, not incidental facts like column counts."""
 from nosqlmigrate.core import diagnostics as diag
 
 
-
-
 def test_all_tables_present(model_ecommerce):
     names = set(model_ecommerce.tables)
     assert names == {
