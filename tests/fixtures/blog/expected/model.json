@@ -31,7 +31,7 @@
         {
           "autoincrement": false,
           "category": "TEXT",
-          "char_length": null,
+          "char_length": 255,
           "default": null,
           "name": "email",
           "nullable": false,
@@ -42,7 +42,7 @@
         {
           "autoincrement": false,
           "category": "TEXT",
-          "char_length": null,
+          "char_length": 120,
           "default": null,
           "name": "display_name",
           "nullable": false,
@@ -96,7 +96,7 @@
         {
           "autoincrement": false,
           "category": "TEXT",
-          "char_length": null,
+          "char_length": 80,
           "default": null,
           "name": "name",
           "nullable": false,
@@ -161,7 +161,7 @@
         {
           "autoincrement": false,
           "category": "TEXT",
-          "char_length": null,
+          "char_length": 255,
           "default": null,
           "name": "author_email",
           "nullable": false,
@@ -388,7 +388,7 @@
         {
           "autoincrement": false,
           "category": "TEXT",
-          "char_length": null,
+          "char_length": 200,
           "default": null,
           "name": "title",
           "nullable": false,
@@ -399,7 +399,7 @@
         {
           "autoincrement": false,
           "category": "TEXT",
-          "char_length": null,
+          "char_length": 220,
           "default": null,
           "name": "slug",
           "nullable": false,
@@ -513,7 +513,7 @@
         {
           "autoincrement": false,
           "category": "TEXT",
-          "char_length": null,
+          "char_length": 60,
           "default": null,
           "name": "name",
           "nullable": false,

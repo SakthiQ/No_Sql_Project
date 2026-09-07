@@ -26,7 +26,7 @@ from ..core.model import RelationalModel
 from ..core.workload import Predicate, Projection, Query, QueryKind, Sort, Workload
 from .dialects import sqlglot_dialect
 
-_DIRECTIVE = re.compile(r"--\s*@(weight|tag)\s+([\w.]+)")
+_DIRECTIVE = re.compile(r"@(weight|tag)\s+([\w.]+)")
 
 
 def split_statements(sql: str) -> list[tuple[dict, str]]:

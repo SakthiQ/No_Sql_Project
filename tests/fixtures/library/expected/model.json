@@ -18,7 +18,7 @@
         {
           "autoincrement": false,
           "category": "TEXT",
-          "char_length": null,
+          "char_length": 60,
           "default": null,
           "name": "genre_name",
           "nullable": false,
@@ -54,7 +54,7 @@
         {
           "autoincrement": false,
           "category": "TEXT",
-          "char_length": null,
+          "char_length": 120,
           "default": null,
           "name": "full_name",
           "nullable": false,
@@ -187,7 +187,7 @@
         {
           "autoincrement": false,
           "category": "TEXT",
-          "char_length": null,
+          "char_length": 12,
           "default": "'available'",
           "name": "status",
           "nullable": false,
@@ -258,7 +258,7 @@
         {
           "autoincrement": false,
           "category": "TEXT",
-          "char_length": null,
+          "char_length": 20,
           "default": null,
           "name": "isbn",
           "nullable": false,
@@ -337,7 +337,7 @@
         {
           "autoincrement": false,
           "category": "TEXT",
-          "char_length": null,
+          "char_length": 200,
           "default": null,
           "name": "title",
           "nullable": false,
@@ -348,7 +348,7 @@
         {
           "autoincrement": false,
           "category": "TEXT",
-          "char_length": null,
+          "char_length": 120,
           "default": null,
           "name": "publisher",
           "nullable": true,
@@ -420,7 +420,7 @@
         {
           "autoincrement": false,
           "category": "TEXT",
-          "char_length": null,
+          "char_length": 120,
           "default": null,
           "name": "branch_name",
           "nullable": false,
@@ -431,7 +431,7 @@
         {
           "autoincrement": false,
           "category": "TEXT",
-          "char_length": null,
+          "char_length": 80,
           "default": null,
           "name": "city",
           "nullable": false,
@@ -587,7 +587,7 @@
         {
           "autoincrement": false,
           "category": "TEXT",
-          "char_length": null,
+          "char_length": 120,
           "default": null,
           "name": "full_name",
           "nullable": false,
@@ -598,7 +598,7 @@
         {
           "autoincrement": false,
           "category": "TEXT",
-          "char_length": null,
+          "char_length": 255,
           "default": null,
           "name": "email",
           "nullable": false,
