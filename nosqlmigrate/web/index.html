@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>nosqlmigrate — relational → NoSQL schema advisor</title>
+  <link rel="stylesheet" href="/static/styles.css">
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+</head>
+<body>
+  <header>
+    <div class="brand">
+      <span class="logo">{r→n}</span>
+      <div>
+        <h1>nosqlmigrate</h1>
+        <p>relational → NoSQL schema advisor · MongoDB · Cassandra · Neo4j</p>
+      </div>
+    </div>
+    <div class="samples">
+      <span>samples:</span>
+      <button data-sample="ecommerce">e-commerce</button>
+      <button data-sample="blog">blog</button>
+      <button data-sample="library">library</button>
+    </div>
+  </header>
+
+  <main>
+    <section class="editor">
+      <div class="pane-head">
+        <h2>1 · Relational schema (DDL)</h2>
+        <select id="dialect" title="SQL dialect">
+          <option value="auto">auto-detect</option>
+          <option value="mysql">MySQL</option>
+          <option value="postgres">Postgres</option>
+        </select>
+      </div>
+      <textarea id="ddl" spellcheck="false" placeholder="paste CREATE TABLE statements…"></textarea>
+      <div class="pane-head">
+        <h2>2 · Query workload</h2>
+        <span class="hint">weight with <code>-- @weight 30 @tag read</code></span>
+      </div>
+      <textarea id="queries" spellcheck="false" placeholder="paste the queries the app actually runs…"></textarea>
+      <button id="analyze" class="primary">Analyze →</button>
+      <div id="status" class="status"></div>
+    </section>
+
+    <section class="results" id="results">
+      <nav class="tabs" id="tabs">
+        <button data-tab="overview" class="active">Overview</button>
+        <button data-tab="decisions">Decisions</button>
+        <button data-tab="document">MongoDB</button>
+        <button data-tab="columnar">Cassandra</button>
+        <button data-tab="graph">Neo4j</button>
+        <button data-tab="report">Report</button>
+        <button data-tab="rules">Rules</button>
+      </nav>
+      <div class="tab-body">
+        <div id="tab-overview" class="tab active"></div>
+        <div id="tab-decisions" class="tab"></div>
+        <div id="tab-document" class="tab"></div>
+        <div id="tab-columnar" class="tab"></div>
+        <div id="tab-graph" class="tab"></div>
+        <div id="tab-report" class="tab"></div>
+        <div id="tab-rules" class="tab"></div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    every embed-vs-reference call cites its rule, its signals, and what it costs —
+    estimates are structural inferences, not measurements.
+  </footer>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>
